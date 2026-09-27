@@ -1467,6 +1467,14 @@ body.envelope-locked{overflow:hidden;height:100vh}
     linear-gradient(160deg,#FFFDF7 0%,#F7E7CE 100%);
 }
 .wheel-ph svg{width:36%;max-width:52px;opacity:.5}
+/* La pista de arrastre perdio su regla al cambiar de galeria: sin display
+   block el span queda inline y text-align no lo centra. */
+.drop-hint{
+  display:block;width:100%;text-align:center;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--peach);margin-top:18px;padding:0 28px;
+}
 @media(max-width:360px){
   .wheel-scene{height:310px}
   .wheel-card{width:132px;height:186px;margin-left:-66px;margin-top:-93px}
