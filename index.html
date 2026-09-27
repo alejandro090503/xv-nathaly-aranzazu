@@ -22,7 +22,7 @@
   <meta name="twitter:image" content="https://xv-nathaly-aranzazu.vercel.app/og.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Great+Vibes&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
   <style>
 /* ── TOKENS ───────────────────────────────────────────── */
 :root {
@@ -83,7 +83,7 @@
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{
   background:var(--ink);color:var(--cream);
-  font-family:'Lato',sans-serif;font-weight:300;
+  font-family:'Lora',serif;font-weight:300;
   overflow-x:hidden;max-width:430px;margin:0 auto;
   -webkit-tap-highlight-color:transparent;
 }
@@ -212,7 +212,9 @@ body.envelope-locked{overflow:hidden;height:100vh}
 /* ── MUSICA · DISCO DE VINILO ─────────────────────────── */
 .music-btn{
   position:fixed;bottom:22px;right:22px;z-index:999;
-  width:70px;height:70px;padding:0;border:none;background:transparent;
+  display:block;box-sizing:content-box;
+  width:70px;height:70px;min-width:70px;padding:0;border:none;background:transparent;
+  border-radius:50%;line-height:0;
   cursor:pointer;-webkit-tap-highlight-color:transparent;
   filter:drop-shadow(0 6px 18px rgba(42,51,37,.38));
   transition:transform .3s var(--spring);
@@ -233,7 +235,9 @@ body.envelope-locked{overflow:hidden;height:100vh}
 }
 /* El disco: surcos concentricos sobre negro verdoso */
 .vinyl{
-  width:70px;height:70px;border-radius:50%;
+  display:block;flex:0 0 auto;
+  width:70px;height:70px;min-width:70px;min-height:70px;
+  aspect-ratio:1/1;border-radius:50%;
   position:relative;overflow:hidden;
   background:
     radial-gradient(circle at 30% 28%, rgba(255,255,255,.12) 0%, transparent 45%),
@@ -262,7 +266,7 @@ body.envelope-locked{overflow:hidden;height:100vh}
 /* Etiqueta central: champan metalico real (conico, no plano) */
 .vinyl-label{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:27px;height:27px;border-radius:50%;
+  display:block;width:27px;height:27px;aspect-ratio:1/1;border-radius:50%;
   background:
     radial-gradient(circle at 38% 33%, rgba(255,255,255,.3) 0%, transparent 55%),
     conic-gradient(from 0deg,#C9A96A,#F7E7CE 16%,#FFFDF6 30%,#E8D2A6 46%,
@@ -271,7 +275,7 @@ body.envelope-locked{overflow:hidden;height:100vh}
   display:flex;align-items:center;justify-content:center;
 }
 .vinyl-hole{
-  width:7px;height:7px;border-radius:50%;background:#0D1209;
+  display:block;width:7px;height:7px;aspect-ratio:1/1;border-radius:50%;background:#0D1209;
   box-shadow:inset 0 1px 2px rgba(0,0,0,.8);flex-shrink:0;
 }
 /* Pausado: el disco se apaga un poco */
@@ -330,7 +334,7 @@ body.envelope-locked{overflow:hidden;height:100vh}
   width:100%;padding:15px 16px;
   border:1px solid var(--peach);border-radius:7px;
   background:transparent;color:var(--peach);
-  font-family:'Lato',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  font-family:'Lora',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;
   text-decoration:none;cursor:pointer;-webkit-appearance:none;
   position:relative;overflow:hidden;
   transition:background .25s, transform .2s var(--spring);
@@ -365,43 +369,66 @@ body.envelope-locked{overflow:hidden;height:100vh}
     linear-gradient(180deg, #FFFFFF 0%, #F7E7CE 100%);
 }
 .h-aurora{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+/* Velos, no manchas: cada uno desborda el marco, va muy difuminado y se
+   mueve en un recorrido distinto, así el color envuelve el texto en vez de
+   posarse como un borrón. El tamaño va en vmax para que respire igual en
+   cualquier pantalla. */
 .h-blob{
   position:absolute;display:block;border-radius:50%;
-  filter:blur(38px);will-change:transform;
+  will-change:transform;mix-blend-mode:multiply;
 }
 .h-blob-1{
-  width:64%;aspect-ratio:1;left:-14%;top:12%;
-  background:radial-gradient(circle,rgba(150,196,142,.95) 0%,rgba(168,204,160,.5) 42%,rgba(187,221,182,.18) 62%,transparent 76%);
-  animation:blobDrift1 26s ease-in-out infinite;
+  width:118vmax;height:88vmax;left:-52vmax;top:-30vmax;
+  background:radial-gradient(ellipse 50% 50% at 50% 50%,
+    rgba(168,200,160,.52) 0%, rgba(187,221,182,.30) 34%,
+    rgba(206,228,201,.14) 58%, rgba(255,255,255,0) 78%);
+  filter:blur(62px);
+  animation:veil1 34s ease-in-out infinite;
 }
 .h-blob-2{
-  width:58%;aspect-ratio:1;right:-12%;top:30%;
-  background:radial-gradient(circle,rgba(247,231,206,1) 0%,rgba(216,185,127,.62) 40%,rgba(201,169,106,.24) 60%,transparent 76%);
-  animation:blobDrift2 32s ease-in-out infinite;
+  width:104vmax;height:96vmax;right:-46vmax;top:6vmax;
+  background:radial-gradient(ellipse 50% 50% at 50% 50%,
+    rgba(240,219,178,.58) 0%, rgba(247,231,206,.32) 36%,
+    rgba(252,244,228,.15) 60%, rgba(255,255,255,0) 80%);
+  filter:blur(70px);
+  animation:veil2 42s ease-in-out infinite;
 }
 .h-blob-3{
-  width:50%;aspect-ratio:1;left:22%;bottom:4%;
-  background:radial-gradient(circle,rgba(159,182,154,.9) 0%,rgba(122,148,114,.34) 44%,rgba(88,107,80,.12) 64%,transparent 78%);
-  animation:blobDrift3 38s ease-in-out infinite;
+  width:96vmax;height:80vmax;left:-34vmax;bottom:-34vmax;
+  background:radial-gradient(ellipse 50% 50% at 50% 50%,
+    rgba(150,178,144,.40) 0%, rgba(181,197,178,.22) 38%,
+    rgba(226,236,222,.10) 62%, rgba(255,255,255,0) 82%);
+  filter:blur(66px);
+  animation:veil3 38s ease-in-out infinite;
 }
 .h-blob-4{
-  width:46%;aspect-ratio:1;right:6%;top:-8%;
-  background:radial-gradient(circle,rgba(88,107,80,.5) 0%,rgba(88,107,80,.2) 44%,transparent 72%);
-  animation:blobDrift3 30s ease-in-out infinite reverse;
+  width:88vmax;height:74vmax;right:-38vmax;bottom:-26vmax;
+  background:radial-gradient(ellipse 50% 50% at 50% 50%,
+    rgba(228,203,158,.42) 0%, rgba(243,228,201,.22) 40%,
+    rgba(255,251,242,.10) 64%, rgba(255,255,255,0) 84%);
+  filter:blur(74px);
+  animation:veil4 46s ease-in-out infinite;
 }
-@keyframes blobDrift1{
-  0%,100%{transform:translate3d(0,0,0) scale(1)}
-  33%    {transform:translate3d(9%,6%,0) scale(1.1)}
-  66%    {transform:translate3d(-5%,11%,0) scale(.95)}
+/* Recorridos amplios y desfasados: nunca coinciden, así el fondo no "late" */
+@keyframes veil1{
+  0%,100%{transform:translate3d(0,0,0) rotate(0deg) scale(1)}
+  28%    {transform:translate3d(12vmax,7vmax,0) rotate(7deg) scale(1.1)}
+  61%    {transform:translate3d(4vmax,16vmax,0) rotate(-5deg) scale(.96)}
 }
-@keyframes blobDrift2{
-  0%,100%{transform:translate3d(0,0,0) scale(1.04)}
-  40%    {transform:translate3d(-11%,8%,0) scale(.92)}
-  75%    {transform:translate3d(-4%,-7%,0) scale(1.12)}
+@keyframes veil2{
+  0%,100%{transform:translate3d(0,0,0) rotate(0deg) scale(1.03)}
+  35%    {transform:translate3d(-14vmax,10vmax,0) rotate(-8deg) scale(.94)}
+  70%    {transform:translate3d(-6vmax,-9vmax,0) rotate(6deg) scale(1.12)}
 }
-@keyframes blobDrift3{
-  0%,100%{transform:translate3d(0,0,0) scale(1)}
-  50%    {transform:translate3d(7%,-9%,0) scale(1.14)}
+@keyframes veil3{
+  0%,100%{transform:translate3d(0,0,0) rotate(0deg) scale(1)}
+  44%    {transform:translate3d(10vmax,-12vmax,0) rotate(9deg) scale(1.13)}
+  76%    {transform:translate3d(-5vmax,-4vmax,0) rotate(-4deg) scale(1.02)}
+}
+@keyframes veil4{
+  0%,100%{transform:translate3d(0,0,0) rotate(0deg) scale(1.05)}
+  40%    {transform:translate3d(-11vmax,-8vmax,0) rotate(-7deg) scale(.95)}
+  72%    {transform:translate3d(6vmax,-14vmax,0) rotate(5deg) scale(1.1)}
 }
 /* Grano finísimo de papel sobre los halos (rompe el banding del degradado) */
 .h-bg::after{
@@ -410,19 +437,6 @@ body.envelope-locked{overflow:hidden;height:100vh}
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/><feColorMatrix type='saturate' values='0'/></filter><rect width='120' height='120' filter='url(%23n)' opacity='.22'/></svg>");
   background-size:120px 120px;
 }
-/* Ramilletes de esquina: la misma rosa y margarita del patrón, en grande.
-   Respiran muy despacio para que la portada no quede quieta. */
-.h-sprigs{position:absolute;inset:0;pointer-events:none;z-index:1}
-.h-sprig{position:absolute;width:44%;max-width:190px;aspect-ratio:1;opacity:.3;overflow:visible}
-.h-sprig-tl{top:2%;left:-6%;transform-origin:20% 20%;animation:sprigSway 16s ease-in-out infinite}
-.h-sprig-tr{top:6%;right:-8%;transform-origin:80% 20%;animation:sprigSway 19s ease-in-out infinite reverse}
-.h-sprig-bl{bottom:6%;left:-7%;transform-origin:20% 80%;animation:sprigSway 21s ease-in-out infinite}
-.h-sprig-br{bottom:2%;right:-6%;transform-origin:80% 80%;animation:sprigSway 17s ease-in-out infinite reverse}
-@keyframes sprigSway{
-  0%,100%{transform:rotate(0deg) scale(1)}
-  50%    {transform:rotate(2.2deg) scale(1.04)}
-}
-@media(prefers-reduced-motion:reduce){.h-sprig{animation:none!important}}
 
 /* Hilos de seda: el trazo se dibuja y se borra en bucle */
 .h-silk{position:absolute;inset:0;pointer-events:none;opacity:.9}
@@ -492,27 +506,6 @@ body.envelope-locked{overflow:hidden;height:100vh}
 .h-corner-bl{bottom:-2px;left:-2px;transform:scaleY(-1)}
 .h-corner-br{bottom:-2px;right:-2px;transform:scale(-1,-1)}
 @media(prefers-reduced-motion:reduce){.h-corner::before,.h-corner::after{animation:none}}
-
-/* Anillos decorativos concéntricos detrás del texto */
-.h-rings{
-  position:absolute;left:50%;top:50%;
-  width:340px;height:340px;
-  transform:translate(-50%,-50%);
-  z-index:2;pointer-events:none;
-}
-.h-ring{
-  position:absolute;inset:0;
-  border-radius:50%;
-  border:1px solid rgba(88,107,80,.14);
-}
-.h-ring-1{inset:0;animation:hRingBreathe 7s ease-in-out infinite}
-.h-ring-2{inset:-36px;border-style:dashed;border-color:rgba(88,107,80,.11);animation:hRingRotate 60s linear infinite}
-.h-ring-3{inset:-78px;border-color:rgba(88,107,80,.07);animation:hRingBreathe 9s ease-in-out infinite reverse}
-@keyframes hRingBreathe{
-  0%,100%{transform:scale(1);opacity:.7}
-  50%{transform:scale(1.025);opacity:1}
-}
-@keyframes hRingRotate{to{transform:rotate(360deg)}}
 
 /* Ondas de viento en el hero */
 .h-wave{
@@ -1004,6 +997,22 @@ body.envelope-locked{overflow:hidden;height:100vh}
   opacity:.85;
 }
 
+/* Gota de luz que viaja en la punta del trazo mientras se dibuja */
+.tl-pearl{
+  position:absolute;width:20px;height:20px;margin:-10px 0 0 -10px;
+  border-radius:50%;
+  background:radial-gradient(circle at 38% 34%,
+    #FFFFFF 0%, #FFFDF6 34%, rgba(247,231,206,.18) 100%);
+  box-shadow:
+    0 0 10px 4px rgba(255,253,246,.92),
+    0 0 24px 9px rgba(168,196,155,.55),
+    0 0 46px 16px rgba(88,107,80,.20);
+  opacity:0;pointer-events:none;z-index:3;
+  will-change:left,top,opacity;
+  transition:opacity .35s ease;
+}
+@media(prefers-reduced-motion:reduce){.tl-pearl{display:none}}
+
 /* Fila con zig-zag: lado izq y der — texto nunca cruza la línea central */
 .tl-row{
   position:relative;
@@ -1235,6 +1244,40 @@ body.envelope-locked{overflow:hidden;height:100vh}
 }
 
 /* ── FAMILY · CAMINO EN S ────────────────────────────── */
+/* ── DRESS CODE · figuras ─────────────────────────────── */
+.dc-figs{
+  display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:end;gap:0;margin:6px 0 30px;
+}
+.dc-fig{display:flex;flex-direction:column;align-items:center;gap:12px}
+.dc-fig img{
+  height:230px;width:auto;max-width:100%;object-fit:contain;display:block;
+  filter:drop-shadow(0 6px 16px rgba(42,51,37,.16));
+}
+.dc-fig-label{
+  font-family:'Cormorant Garamond',serif;
+  font-size:14px;font-weight:600;letter-spacing:3px;text-transform:uppercase;
+  color:var(--peach);
+}
+/* Divisor: filete metálico vertical con un rombo al centro */
+.dc-divider{
+  width:1px;align-self:stretch;margin:12px 16px 34px;
+  position:relative;
+  background:linear-gradient(to bottom,
+    transparent 0%, rgba(201,169,106,.55) 22%,
+    rgba(201,169,106,.75) 50%, rgba(201,169,106,.55) 78%, transparent 100%);
+}
+.dc-divider::after{
+  content:'';position:absolute;top:50%;left:50%;
+  width:6px;height:6px;margin:-3px 0 0 -3px;
+  transform:rotate(45deg);
+  background:var(--champ-deep);
+}
+@media(max-width:340px){
+  .dc-fig img{height:190px}
+  .dc-divider{margin:12px 8px 30px}
+}
+
 #family{background:var(--ink);overflow:hidden}
 .family-path{
   margin-top:44px;position:relative;
@@ -1383,29 +1426,33 @@ body.envelope-locked{overflow:hidden;height:100vh}
   color:var(--peach);font-style:italic;
 }
 
-.drop-stage{
-  position:relative;height:380px;
-  margin-top:28px;overflow:visible;
+/* ── GALERÍA · RUEDA 3D ───────────────────────────────── */
+#gallery{overflow-x:hidden}
+.wheel-scene{
+  position:relative;width:100%;height:360px;margin:34px auto 0;
+  perspective:1200px;transform-style:preserve-3d;overflow:visible;
 }
-.drop-photo{
-  position:absolute;
-  width:112px;height:150px;
-  background:#fff;
-  border-radius:3px;padding:7px 7px 30px;
-  box-shadow:0 8px 30px rgba(42,51,37,.12);
-  left:50%;opacity:0;
-  will-change:transform,opacity;
-  cursor:pointer;
-  transition:box-shadow .3s;
+.wheel-ring{
+  position:absolute;width:100%;height:100%;
+  transform-style:preserve-3d;cursor:grab;touch-action:pan-y;
 }
-.drop-photo img{
+.wheel-ring.dragging{cursor:grabbing}
+.wheel-card{
+  position:absolute;width:168px;height:236px;
+  left:50%;top:50%;margin-left:-84px;margin-top:-118px;
+  border-radius:14px;overflow:hidden;
+  border:2px solid rgba(201,169,106,.5);
+  box-shadow:0 12px 34px rgba(42,51,37,.20);
+  user-select:none;-webkit-user-select:none;
+  background:#FFFDF7;
+}
+.wheel-card img{
+  width:100%;height:100%;object-fit:cover;object-position:center;
+  display:block;pointer-events:none;
+}
+/* Tarjeta en espera: mismo papel champán rayado de los marcos vacíos */
+.wheel-ph{
   width:100%;height:100%;
-  object-fit:cover;object-position:center top;
-  border-radius:2px;display:block;pointer-events:none;
-}
-/* Marco en espera: papel champán con una flor de trazo verde */
-.drop-ph{
-  width:100%;height:100%;border-radius:2px;
   display:flex;align-items:center;justify-content:center;
   color:var(--peach);
   background:
@@ -1413,31 +1460,11 @@ body.envelope-locked{overflow:hidden;height:100vh}
       rgba(201,169,106,.09) 0px, rgba(201,169,106,.09) 1px,
       transparent 1px, transparent 7px),
     linear-gradient(160deg,#FFFDF7 0%,#F7E7CE 100%);
-  box-shadow:inset 0 0 0 1px rgba(201,169,106,.35);
 }
-.drop-ph svg{width:38%;max-width:44px;opacity:.5}
-.drop-photo-label{
-  position:absolute;bottom:7px;left:0;right:0;
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:9px;letter-spacing:2px;text-transform:uppercase;
-  color:var(--peach);text-align:center;opacity:.65;
-}
-.drop-photo-1{margin-left:-160px;top:8px}
-.drop-photo-2{margin-left:-56px;top:115px}
-.drop-photo-3{margin-left:48px;top:4px}
-.drop-photo-4{margin-left:-160px;top:210px}
-.drop-photo-5{margin-left:48px;top:200px}
-.drop-photo.focused{z-index:10!important}
-.drop-hint{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:13px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;
-  color:var(--peach);opacity:.6;
-  margin-top:14px;display:block;
-  padding:0 28px;text-align:center;
-}
-
-@media(prefers-reduced-motion:reduce){
-  .drop-photo{transition:none!important}
+.wheel-ph svg{width:36%;max-width:52px;opacity:.5}
+@media(max-width:360px){
+  .wheel-scene{height:320px}
+  .wheel-card{width:148px;height:208px;margin-left:-74px;margin-top:-104px}
 }
 
 
@@ -1533,7 +1560,7 @@ body.envelope-locked{overflow:hidden;height:100vh}
 .finput{
   width:100%;background:var(--ink2);border:1px solid rgba(88,107,80,.2);
   border-radius:7px;padding:15px 18px;color:var(--cream);
-  font-family:'Lato',sans-serif;font-size:15px;font-weight:300;
+  font-family:'Lora',serif;font-size:15px;font-weight:300;
   outline:none;-webkit-appearance:none;
   transition:border-color .3s,box-shadow .3s;
 }
@@ -1745,7 +1772,7 @@ body.envelope-locked{overflow:hidden;height:100vh}
 .gf-bk-lbl{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--cream);opacity:.85}
 .gf-bk-val{color:var(--cream);font-size:14px;font-weight:500;text-align:right}
 .gf-bk-clabe-wrap{flex-direction:column;align-items:center;gap:6px;padding-top:12px}
-.gf-bk-clabe{font-family:'Lato',monospace;color:var(--peach);font-size:15px;letter-spacing:2px;width:100%;text-align:center}
+.gf-bk-clabe{font-family:'Lora',monospace;color:var(--peach);font-size:15px;letter-spacing:2px;width:100%;text-align:center}
 .gf-copy{margin-top:14px;width:100%;max-width:260px;margin-left:auto;margin-right:auto;font-size:10px;padding:13px 16px}
 
 /* ── ALBUM QR ─────────────────────────────────────────── */
@@ -2273,7 +2300,7 @@ section.has-sec-waves{padding-top:84px;padding-bottom:86px}
 .loc-dual--single .loc-dual-ev{flex:0 1 auto;text-align:center}
 .fam-nms--tbc{font-style:italic;opacity:.72}
 .dc-avoid{
-  font-family:'Lato',sans-serif;font-size:15px;font-weight:500;line-height:1.6;
+  font-family:'Lora',serif;font-size:15px;font-weight:500;line-height:1.6;
   color:var(--cream);opacity:.9;margin:26px auto 0;max-width:330px;
   padding-top:20px;border-top:1px solid rgba(88,107,80,.22);
 }
@@ -2292,7 +2319,7 @@ section.has-sec-waves{padding-top:84px;padding-bottom:86px}
 .rsvp-toggle-btn{
   flex:1;padding:14px 10px;border:1px solid rgba(88,107,80,.35);
   border-radius:10px;background:transparent;cursor:pointer;
-  font-family:'Lato',sans-serif;font-size:15px;font-weight:500;
+  font-family:'Lora',serif;font-size:15px;font-weight:500;
   letter-spacing:.02em;color:var(--cream);transition:all .25s;
   -webkit-appearance:none;
 }
@@ -2306,7 +2333,7 @@ section.has-sec-waves{padding-top:84px;padding-bottom:86px}
 }
 .rsvp-fields{display:flex;flex-direction:column;gap:10px;margin-bottom:4px}
 .rsvp-feedback{
-  font-family:'Lato',sans-serif;font-size:15px;font-weight:500;line-height:1.55;
+  font-family:'Lora',serif;font-size:15px;font-weight:500;line-height:1.55;
   text-align:center;margin:14px auto 0;max-width:300px;
 }
 .rsvp-gracias{
@@ -2320,12 +2347,12 @@ section.has-sec-waves{padding-top:84px;padding-bottom:86px}
   color:var(--cream);margin-bottom:8px;line-height:1.35;
 }
 .rsvp-gracias-sub{
-  font-family:'Lato',sans-serif;font-size:15px;font-weight:500;
+  font-family:'Lora',serif;font-size:15px;font-weight:500;
   color:var(--cream);opacity:.85;line-height:1.6;margin-bottom:18px;
 }
 .rsvp-editar-btn{
   padding:11px 22px;border:1px solid rgba(88,107,80,.4);background:transparent;
-  cursor:pointer;font-family:'Lato',sans-serif;font-size:14px;font-weight:500;
+  cursor:pointer;font-family:'Lora',serif;font-size:14px;font-weight:500;
   color:var(--peach);border-radius:24px;transition:all .25s;-webkit-appearance:none;
 }
 .rsvp-editar-btn:active{background:rgba(88,107,80,.12)}
@@ -2523,34 +2550,6 @@ body{font-weight:400}
       </svg>
     </div>
   </div>
-  <div class="h-sprigs" aria-hidden="true">
-    <svg class="h-sprig h-sprig-tl" viewBox="0 0 120 120">
-      <g fill="none" stroke="#586B50" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round">
-        <g transform="translate(40 44) rotate(-18) scale(2.1)"><circle cx='0' cy='0' r='2.2'/><path d='M-1.6 -1.6 Q-4.5 -1 -4.5 1.8 Q-4.5 4.4 -1.4 4.5 Q1.4 4.5 1.6 1.8 Q1.6 -1 -1.6 -1.6Z'/><path d='M-3.5 -3.5 Q-7.8 -2.6 -7.8 2 Q-7.8 6.2 -3 7.4 Q1.6 8 4.5 5.5 Q7.6 2.4 6.4 -2 Q5 -6.6 0.4 -6.6 Q-2.2 -6.6 -3.5 -3.5Z'/><path d='M-7 -1.5 Q-12 0 -11 5.6 Q-9.5 11.4 -3.5 12 Q3 12.6 7.6 9 Q12.4 5 11 -1 Q9.4 -7.6 3 -9 Q-3.4 -10 -7 -1.5Z'/><path d='M0 12 Q-2 18 -1 22 M-1 22 Q-5 21 -7 17 M-1 22 Q4 22 6 18'/><path d='M-9 4 Q-13 5 -14 9 Q-11 11 -8 8' opacity='.7'/></g>
-        <g transform="translate(86 26) rotate(22) scale(1.15)"><circle cx='0' cy='0' r='2.4' fill='#C9A96A' fill-opacity='.75' stroke='none'/><ellipse cx='0' cy='-9' rx='2.6' ry='6'/><ellipse cx='6.3' cy='-6.3' rx='2.6' ry='6' transform='rotate(45 6.3 -6.3)'/><ellipse cx='9' cy='0' rx='2.6' ry='6' transform='rotate(90 9 0)'/><ellipse cx='6.3' cy='6.3' rx='2.6' ry='6' transform='rotate(135 6.3 6.3)'/><ellipse cx='0' cy='9' rx='2.6' ry='6'/><ellipse cx='-6.3' cy='6.3' rx='2.6' ry='6' transform='rotate(45 -6.3 6.3)'/><ellipse cx='-9' cy='0' rx='2.6' ry='6' transform='rotate(90 -9 0)'/><ellipse cx='-6.3' cy='-6.3' rx='2.6' ry='6' transform='rotate(135 -6.3 -6.3)'/><path d='M0 12 Q-1 17 0 22 M0 22 Q-4 21 -5 17 M0 22 Q4 21 5 17' opacity='.7'/></g>
-        <g transform="translate(74 74) rotate(38) scale(1.1)" opacity=".7"><path d='M0 0 Q6 -4.5 12 0 Q6 4.5 0 0Z'/><path d='M3 0 L9 0' stroke-width='.45'/></g>
-      </g>
-    </svg>
-    <svg class="h-sprig h-sprig-tr" viewBox="0 0 120 120">
-      <g fill="none" stroke="#586B50" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round">
-        <g transform="translate(74 40) rotate(14) scale(1.7)"><circle cx='0' cy='0' r='2.4' fill='#C9A96A' fill-opacity='.75' stroke='none'/><ellipse cx='0' cy='-9' rx='2.6' ry='6'/><ellipse cx='6.3' cy='-6.3' rx='2.6' ry='6' transform='rotate(45 6.3 -6.3)'/><ellipse cx='9' cy='0' rx='2.6' ry='6' transform='rotate(90 9 0)'/><ellipse cx='6.3' cy='6.3' rx='2.6' ry='6' transform='rotate(135 6.3 6.3)'/><ellipse cx='0' cy='9' rx='2.6' ry='6'/><ellipse cx='-6.3' cy='6.3' rx='2.6' ry='6' transform='rotate(45 -6.3 6.3)'/><ellipse cx='-9' cy='0' rx='2.6' ry='6' transform='rotate(90 -9 0)'/><ellipse cx='-6.3' cy='-6.3' rx='2.6' ry='6' transform='rotate(135 -6.3 -6.3)'/><path d='M0 12 Q-1 17 0 22 M0 22 Q-4 21 -5 17 M0 22 Q4 21 5 17' opacity='.7'/></g>
-        <g transform="translate(30 70) rotate(-24) scale(1.5)"><circle cx='0' cy='0' r='2.2'/><path d='M-1.6 -1.6 Q-4.5 -1 -4.5 1.8 Q-4.5 4.4 -1.4 4.5 Q1.4 4.5 1.6 1.8 Q1.6 -1 -1.6 -1.6Z'/><path d='M-3.5 -3.5 Q-7.8 -2.6 -7.8 2 Q-7.8 6.2 -3 7.4 Q1.6 8 4.5 5.5 Q7.6 2.4 6.4 -2 Q5 -6.6 0.4 -6.6 Q-2.2 -6.6 -3.5 -3.5Z'/><path d='M-7 -1.5 Q-12 0 -11 5.6 Q-9.5 11.4 -3.5 12 Q3 12.6 7.6 9 Q12.4 5 11 -1 Q9.4 -7.6 3 -9 Q-3.4 -10 -7 -1.5Z'/><path d='M0 12 Q-2 18 -1 22 M-1 22 Q-5 21 -7 17 M-1 22 Q4 22 6 18'/><path d='M-9 4 Q-13 5 -14 9 Q-11 11 -8 8' opacity='.7'/></g>
-        <g transform="translate(96 84) rotate(-40) scale(1.05)" opacity=".7"><path d='M0 0 Q6 -4.5 12 0 Q6 4.5 0 0Z'/><path d='M3 0 L9 0' stroke-width='.45'/></g>
-      </g>
-    </svg>
-    <svg class="h-sprig h-sprig-bl" viewBox="0 0 120 120">
-      <g fill="none" stroke="#586B50" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round">
-        <g transform="translate(44 72) rotate(168) scale(1.85)"><circle cx='0' cy='0' r='2.4' fill='#C9A96A' fill-opacity='.75' stroke='none'/><ellipse cx='0' cy='-9' rx='2.6' ry='6'/><ellipse cx='6.3' cy='-6.3' rx='2.6' ry='6' transform='rotate(45 6.3 -6.3)'/><ellipse cx='9' cy='0' rx='2.6' ry='6' transform='rotate(90 9 0)'/><ellipse cx='6.3' cy='6.3' rx='2.6' ry='6' transform='rotate(135 6.3 6.3)'/><ellipse cx='0' cy='9' rx='2.6' ry='6'/><ellipse cx='-6.3' cy='6.3' rx='2.6' ry='6' transform='rotate(45 -6.3 6.3)'/><ellipse cx='-9' cy='0' rx='2.6' ry='6' transform='rotate(90 -9 0)'/><ellipse cx='-6.3' cy='-6.3' rx='2.6' ry='6' transform='rotate(135 -6.3 -6.3)'/><path d='M0 12 Q-1 17 0 22 M0 22 Q-4 21 -5 17 M0 22 Q4 21 5 17' opacity='.7'/></g>
-        <g transform="translate(84 44) rotate(150) scale(1.25)"><circle cx='0' cy='0' r='2.2'/><path d='M-1.6 -1.6 Q-4.5 -1 -4.5 1.8 Q-4.5 4.4 -1.4 4.5 Q1.4 4.5 1.6 1.8 Q1.6 -1 -1.6 -1.6Z'/><path d='M-3.5 -3.5 Q-7.8 -2.6 -7.8 2 Q-7.8 6.2 -3 7.4 Q1.6 8 4.5 5.5 Q7.6 2.4 6.4 -2 Q5 -6.6 0.4 -6.6 Q-2.2 -6.6 -3.5 -3.5Z'/><path d='M-7 -1.5 Q-12 0 -11 5.6 Q-9.5 11.4 -3.5 12 Q3 12.6 7.6 9 Q12.4 5 11 -1 Q9.4 -7.6 3 -9 Q-3.4 -10 -7 -1.5Z'/><path d='M0 12 Q-2 18 -1 22 M-1 22 Q-5 21 -7 17 M-1 22 Q4 22 6 18'/><path d='M-9 4 Q-13 5 -14 9 Q-11 11 -8 8' opacity='.7'/></g>
-      </g>
-    </svg>
-    <svg class="h-sprig h-sprig-br" viewBox="0 0 120 120">
-      <g fill="none" stroke="#586B50" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round">
-        <g transform="translate(70 70) rotate(196) scale(2)"><circle cx='0' cy='0' r='2.2'/><path d='M-1.6 -1.6 Q-4.5 -1 -4.5 1.8 Q-4.5 4.4 -1.4 4.5 Q1.4 4.5 1.6 1.8 Q1.6 -1 -1.6 -1.6Z'/><path d='M-3.5 -3.5 Q-7.8 -2.6 -7.8 2 Q-7.8 6.2 -3 7.4 Q1.6 8 4.5 5.5 Q7.6 2.4 6.4 -2 Q5 -6.6 0.4 -6.6 Q-2.2 -6.6 -3.5 -3.5Z'/><path d='M-7 -1.5 Q-12 0 -11 5.6 Q-9.5 11.4 -3.5 12 Q3 12.6 7.6 9 Q12.4 5 11 -1 Q9.4 -7.6 3 -9 Q-3.4 -10 -7 -1.5Z'/><path d='M0 12 Q-2 18 -1 22 M-1 22 Q-5 21 -7 17 M-1 22 Q4 22 6 18'/><path d='M-9 4 Q-13 5 -14 9 Q-11 11 -8 8' opacity='.7'/></g>
-        <g transform="translate(32 42) rotate(210) scale(1.1)"><circle cx='0' cy='0' r='2.4' fill='#C9A96A' fill-opacity='.75' stroke='none'/><ellipse cx='0' cy='-9' rx='2.6' ry='6'/><ellipse cx='6.3' cy='-6.3' rx='2.6' ry='6' transform='rotate(45 6.3 -6.3)'/><ellipse cx='9' cy='0' rx='2.6' ry='6' transform='rotate(90 9 0)'/><ellipse cx='6.3' cy='6.3' rx='2.6' ry='6' transform='rotate(135 6.3 6.3)'/><ellipse cx='0' cy='9' rx='2.6' ry='6'/><ellipse cx='-6.3' cy='6.3' rx='2.6' ry='6' transform='rotate(45 -6.3 6.3)'/><ellipse cx='-9' cy='0' rx='2.6' ry='6' transform='rotate(90 -9 0)'/><ellipse cx='-6.3' cy='-6.3' rx='2.6' ry='6' transform='rotate(135 -6.3 -6.3)'/><path d='M0 12 Q-1 17 0 22 M0 22 Q-4 21 -5 17 M0 22 Q4 21 5 17' opacity='.7'/></g>
-      </g>
-    </svg>
-  </div>
   <div class="h-ov"></div>
   <div class="h-frame">
     <span class="h-corner h-corner-tl"></span>
@@ -2571,13 +2570,6 @@ body{font-weight:400}
       <path d="M0,24 Q110,40 220,24 T440,24 T660,24 T880,24 T1100,24 T1320,24 T1540,24 T1760,24" fill="none" stroke="rgba(88,107,80,.38)" stroke-width="1"/>
       <path d="M0,14 Q110,30 220,14 T440,14 T660,14 T880,14 T1100,14 T1320,14 T1540,14 T1760,14" fill="none" stroke="rgba(88,107,80,.18)" stroke-width=".8"/>
     </svg>
-  </div>
-
-  <!-- Anillos decorativos detrás del texto -->
-  <div class="h-rings" aria-hidden="true">
-    <div class="h-ring h-ring-1"></div>
-    <div class="h-ring h-ring-2"></div>
-    <div class="h-ring h-ring-3"></div>
   </div>
 
   <div class="h-particles" id="hPart"></div>
@@ -2795,6 +2787,7 @@ body{font-weight:400}
       <path class="tl-svg-path" id="tlPath"/>
       <path class="tl-svg-core" id="tlPathCore"/>
     </svg>
+    <div class="tl-pearl" id="tlPearl" aria-hidden="true"></div>
 
     <div class="tl-row" data-side="left">
       <div class="tl-orn"></div><div class="tl-pulse"></div><div class="tl-dot"></div>
@@ -2914,18 +2907,16 @@ body{font-weight:400}
   <div class="gline"></div>
 
   <div class="dc-formal" style="text-align:center;padding:48px 24px;max-width:480px;margin:0 auto;">
-    <div class="dc-formal-ico" style="display:flex;justify-content:center;gap:36px;margin-bottom:28px;color:var(--peach);">
-      <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="5.5" r="3"/>
-        <path d="M10 8.5 L8.5 11 L12 13 L15.5 11 L14 8.5"/>
-        <path d="M8.5 11 L6 22 H18 L15.5 11"/>
-        <line x1="10" y1="9.5" x2="12" y2="11.5"/>
-        <line x1="14" y1="9.5" x2="12" y2="11.5"/>
-      </svg>
-      <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="5.5" r="3"/>
-        <path d="M8 10 Q12 15 16 10 L18.5 22 H5.5 Z"/>
-      </svg>
+    <div class="dc-figs">
+      <div class="dc-fig">
+        <img src="caballero.png" alt="Caballero de etiqueta" width="195" height="620" loading="lazy">
+        <span class="dc-fig-label">Caballeros</span>
+      </div>
+      <div class="dc-divider" aria-hidden="true"></div>
+      <div class="dc-fig">
+        <img src="dama.png" alt="Dama de etiqueta" width="257" height="620" loading="lazy">
+        <span class="dc-fig-label">Damas</span>
+      </div>
     </div>
     <p style="font-family:'Great Vibes',cursive;font-size:clamp(56px,12vw,80px);color:var(--peach);line-height:1;margin:0 0 14px;">Formal</p>
     <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--cream);opacity:.85;letter-spacing:.04em;line-height:1.55;margin:0;">Te quiero ver elegante en este día tan especial</p>
@@ -2957,30 +2948,19 @@ body{font-weight:400}
   <div class="gline"></div>
   <p class="gal-sub"><em>Momentos que atesoro — muy pronto aquí</em></p>
 
-  <div class="drop-stage" id="dropStage">
-    <div class="drop-photo drop-photo-1" id="dropP1">
-      <div class="drop-ph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="3.2"/><path d="M20 16.8 Q16 11 20 6 Q24 11 20 16.8Z"/><path d="M23.2 20 Q29 16 34 20 Q29 24 23.2 20Z"/><path d="M20 23.2 Q24 29 20 34 Q16 29 20 23.2Z"/><path d="M16.8 20 Q11 24 6 20 Q11 16 16.8 20Z"/></svg></div>
-      <span class="drop-photo-label">Sonrisas</span>
-    </div>
-    <div class="drop-photo drop-photo-2" id="dropP2">
-      <div class="drop-ph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="3.2"/><path d="M20 16.8 Q16 11 20 6 Q24 11 20 16.8Z"/><path d="M23.2 20 Q29 16 34 20 Q29 24 23.2 20Z"/><path d="M20 23.2 Q24 29 20 34 Q16 29 20 23.2Z"/><path d="M16.8 20 Q11 24 6 20 Q11 16 16.8 20Z"/></svg></div>
-      <span class="drop-photo-label">Mi historia</span>
-    </div>
-    <div class="drop-photo drop-photo-3" id="dropP3">
-      <div class="drop-ph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="3.2"/><path d="M20 16.8 Q16 11 20 6 Q24 11 20 16.8Z"/><path d="M23.2 20 Q29 16 34 20 Q29 24 23.2 20Z"/><path d="M20 23.2 Q24 29 20 34 Q16 29 20 23.2Z"/><path d="M16.8 20 Q11 24 6 20 Q11 16 16.8 20Z"/></svg></div>
-      <span class="drop-photo-label">Momentos</span>
-    </div>
-    <div class="drop-photo drop-photo-4" id="dropP4">
-      <div class="drop-ph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="3.2"/><path d="M20 16.8 Q16 11 20 6 Q24 11 20 16.8Z"/><path d="M23.2 20 Q29 16 34 20 Q29 24 23.2 20Z"/><path d="M20 23.2 Q24 29 20 34 Q16 29 20 23.2Z"/><path d="M16.8 20 Q11 24 6 20 Q11 16 16.8 20Z"/></svg></div>
-      <span class="drop-photo-label">Recuerdos</span>
-    </div>
-    <div class="drop-photo drop-photo-5" id="dropP5">
-      <div class="drop-ph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="3.2"/><path d="M20 16.8 Q16 11 20 6 Q24 11 20 16.8Z"/><path d="M23.2 20 Q29 16 34 20 Q29 24 23.2 20Z"/><path d="M20 23.2 Q24 29 20 34 Q16 29 20 23.2Z"/><path d="M16.8 20 Q11 24 6 20 Q11 16 16.8 20Z"/></svg></div>
-      <span class="drop-photo-label">De noche</span>
+  <div class="wheel-scene" id="wheelScene">
+    <div class="wheel-ring" id="wheelRing">
+        <div class="wheel-card"><div class="wheel-ph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="3.2"/><path d="M20 16.8 Q16 11 20 6 Q24 11 20 16.8Z"/><path d="M23.2 20 Q29 16 34 20 Q29 24 23.2 20Z"/><path d="M20 23.2 Q24 29 20 34 Q16 29 20 23.2Z"/><path d="M16.8 20 Q11 24 6 20 Q11 16 16.8 20Z"/></svg></div></div>
+        <div class="wheel-card"><div class="wheel-ph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="3.2"/><path d="M20 16.8 Q16 11 20 6 Q24 11 20 16.8Z"/><path d="M23.2 20 Q29 16 34 20 Q29 24 23.2 20Z"/><path d="M20 23.2 Q24 29 20 34 Q16 29 20 23.2Z"/><path d="M16.8 20 Q11 24 6 20 Q11 16 16.8 20Z"/></svg></div></div>
+        <div class="wheel-card"><div class="wheel-ph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="3.2"/><path d="M20 16.8 Q16 11 20 6 Q24 11 20 16.8Z"/><path d="M23.2 20 Q29 16 34 20 Q29 24 23.2 20Z"/><path d="M20 23.2 Q24 29 20 34 Q16 29 20 23.2Z"/><path d="M16.8 20 Q11 24 6 20 Q11 16 16.8 20Z"/></svg></div></div>
+        <div class="wheel-card"><div class="wheel-ph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="3.2"/><path d="M20 16.8 Q16 11 20 6 Q24 11 20 16.8Z"/><path d="M23.2 20 Q29 16 34 20 Q29 24 23.2 20Z"/><path d="M20 23.2 Q24 29 20 34 Q16 29 20 23.2Z"/><path d="M16.8 20 Q11 24 6 20 Q11 16 16.8 20Z"/></svg></div></div>
+        <div class="wheel-card"><div class="wheel-ph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="3.2"/><path d="M20 16.8 Q16 11 20 6 Q24 11 20 16.8Z"/><path d="M23.2 20 Q29 16 34 20 Q29 24 23.2 20Z"/><path d="M20 23.2 Q24 29 20 34 Q16 29 20 23.2Z"/><path d="M16.8 20 Q11 24 6 20 Q11 16 16.8 20Z"/></svg></div></div>
+        <div class="wheel-card"><div class="wheel-ph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="3.2"/><path d="M20 16.8 Q16 11 20 6 Q24 11 20 16.8Z"/><path d="M23.2 20 Q29 16 34 20 Q29 24 23.2 20Z"/><path d="M20 23.2 Q24 29 20 34 Q16 29 20 23.2Z"/><path d="M16.8 20 Q11 24 6 20 Q11 16 16.8 20Z"/></svg></div></div>
     </div>
   </div>
 
-  <span class="drop-hint" id="dropHint">Las fotos de Nathaly se agregarán muy pronto</span>
+  <span class="drop-hint" id="dropHint">Arrastra para girar — las fotos de Nathaly llegan muy pronto</span>
+
 </section>
 
 
@@ -3373,7 +3353,8 @@ function buildTimelinePath() {
       p.style.strokeDashoffset = len;
     });
 
-    window.__tlData = { path, halo, beam, core, len, rows };
+    window.__tlData = { path, halo, beam, core, len, rows,
+                        pearl: document.getElementById('tlPearl') };
     if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
   }
 
@@ -3393,6 +3374,24 @@ function buildTimelinePath() {
   window.addEventListener('load', build);
 }
 
+/* ── REVEAL SEGURO ────────────────────────────────────────
+   Equivalente a gsap.from() pero que NUNCA deja el elemento en opacity:0
+   si el ScrollTrigger no llega a dispararse. */
+function revealFrom(targets, vars){
+  var from = {}, to = { immediateRender:false, overwrite:'auto' };
+  ['opacity','y','x','scale','rotation'].forEach(function(k){
+    if (k in vars){
+      from[k] = vars[k];
+      to[k]   = (k === 'opacity' || k === 'scale') ? 1 : 0;
+    }
+  });
+  ['duration','ease','stagger','delay','onComplete'].forEach(function(k){
+    if (k in vars) to[k] = vars[k];
+  });
+  if (vars.scrollTrigger) to.scrollTrigger = vars.scrollTrigger;
+  return gsap.fromTo(targets, from, to);
+}
+
 /* ── SCROLL ANIMATIONS ───────────────────────────────── */
 function scrollAnims() {
   const ease = 'power3.out';
@@ -3401,7 +3400,7 @@ function scrollAnims() {
   document.querySelectorAll('section').forEach(sec => {
     const els = sec.querySelectorAll('.lbl,.ttl,.gline');
     if (els.length) {
-      gsap.from(els, {
+      revealFrom(els, {
         opacity: 0, y: 22, duration: .7, stagger: .1, ease,
         scrollTrigger: { trigger: sec, start: 'top 88%', once: true }
       });
@@ -3409,7 +3408,7 @@ function scrollAnims() {
   });
 
   // Countdown rings — entrada suave (sin scale, evita que queden encogidos)
-  gsap.from('.cd-ring-item', {
+  revealFrom('.cd-ring-item', {
     opacity: 0, y: 22,
     duration: .65, stagger: .11,
     ease: 'power3.out',
@@ -3420,7 +3419,7 @@ function scrollAnims() {
   ScrollTrigger.create({
     trigger: '#location', start: 'top 78%', once: true,
     onEnter() {
-      gsap.from('.loc-card', {
+      revealFrom('.loc-card', {
         opacity: 0, y: 36, duration: .75, stagger: .14, ease
       });
       document.querySelectorAll('.loc-card').forEach((c, i) => {
@@ -3430,7 +3429,7 @@ function scrollAnims() {
   });
 
   // Calendar button
-  gsap.from(['#calendar .cal-sub', '#calBtn'], {
+  revealFrom(['#calendar .cal-sub', '#calBtn'], {
     opacity: 0, y: 18, scale: .96, duration: .65, stagger: .14,
     ease: 'back.out(1.3)',
     scrollTrigger: { trigger: '#calendar', start: 'top 84%', once: true }
@@ -3438,24 +3437,39 @@ function scrollAnims() {
 
   // Timeline — camino en S que se dibuja al hacer scroll
   buildTimelinePath();
+  /* El trazo se dibuja mientras la sección cruza la pantalla: empieza cuando
+     asoma por abajo y termina cuando su pie llega al centro. Rango largo =
+     la línea baja despacio y se siente acompañando al dedo. */
   ScrollTrigger.create({
     trigger: '#itinerary',
-    start: 'top 78%',
-    end:   'bottom 58%',
-    scrub: 0.6,
+    start: 'top 72%',
+    end:   'bottom 62%',
+    scrub: 1.1,
     onUpdate(self) {
       const data = window.__tlData;
       if (!data) return;
-      const { path, halo, beam, core, len, rows } = data;
-      const off = len * (1 - self.progress);
-      [path, halo, beam, core].forEach(p => { if (p) p.style.strokeDashoffset = off; });
-      const n = Math.ceil(self.progress * rows.length);
+      const { path, halo, beam, core, len, rows, pearl } = data;
+      const p   = self.progress;
+      const off = len * (1 - p);
+      [path, halo, beam, core].forEach(el => { if (el) el.style.strokeDashoffset = off; });
+      /* La gota viaja sobre la curva real, en la punta del trazo */
+      if (pearl) {
+        if (p > 0.012 && p < 0.988) {
+          const pt = path.getPointAtLength(len * p);
+          pearl.style.left    = pt.x + 'px';
+          pearl.style.top     = pt.y + 'px';
+          pearl.style.opacity = '1';
+        } else {
+          pearl.style.opacity = '0';
+        }
+      }
+      const n = Math.ceil(p * rows.length);
       rows.forEach((r, i) => r.classList.toggle('on', i < n));
     }
   });
 
   // Dress code
-  gsap.from('.dc-sub', {
+  revealFrom('.dc-sub', {
     opacity: 0, y: 18, duration: .65, ease,
     scrollTrigger: { trigger: '#dresscode', start: 'top 82%', once: true }
   });
@@ -3464,32 +3478,32 @@ function scrollAnims() {
     trigger: '#palette', start: 'top 86%', once: true,
     onEnter() {
       gsap.to('.pal-sw', { scale: 1, duration: .55, stagger: .09, ease: 'back.out(2.2)' });
-      gsap.from('#dcNote', { opacity: 0, x: -18, duration: .65, delay: .45, ease });
+      revealFrom('#dcNote', { opacity: 0, x: -18, duration: .65, delay: .45, ease });
     }
   });
 
   // Family
-  gsap.from('.fam-ttl', {
+  revealFrom('.fam-ttl', {
     opacity: 0, y: 18, duration: .6, stagger: .2, ease,
     scrollTrigger: { trigger: '#family', start: 'top 78%', once: true }
   });
-  gsap.from('.fam-card', {
+  revealFrom('.fam-card', {
     opacity: 0, y: 20, duration: .55, stagger: .08, ease,
     scrollTrigger: { trigger: '#family', start: 'top 78%', once: true }
   });
 
   // Gifts
-  gsap.from('.gf-card', {
+  revealFrom('.gf-card', {
     opacity: 0, y: 22, duration: .6, stagger: .11, ease,
     scrollTrigger: { trigger: '#gifts', start: 'top 80%', once: true }
   });
 
   // Album
-  gsap.from('.alb-qr-frame', {
+  revealFrom('.alb-qr-frame', {
     opacity: 0, scale: .86, duration: .75, ease: 'back.out(1.4)',
     scrollTrigger: { trigger: '#album', start: 'top 80%', once: true }
   });
-  gsap.from(['.alb-sub','.alb-scan','.alb-btn','.alb-hint'], {
+  revealFrom(['.alb-sub','.alb-scan','.alb-btn','.alb-hint'], {
     opacity: 0, y: 18, duration: .6, stagger: .1, ease,
     scrollTrigger: { trigger: '#album', start: 'top 80%', once: true }
   });
@@ -3497,13 +3511,13 @@ function scrollAnims() {
   // Gallery — fotos que caen (initGallery se llama al final)
 
   // RSVP form fields
-  gsap.from(['#fg1','#fg2','#fg4'], {
+  revealFrom(['#fg1','#fg2','#fg4'], {
     opacity: 0, y: 18, duration: .55, stagger: .12, ease,
     scrollTrigger: { trigger: '#rsvp', start: 'top 80%', once: true }
   });
 
   // Footer
-  gsap.from('#footer > *', {
+  revealFrom('#footer > *', {
     opacity: 0, y: 20, duration: .6, stagger: .1, ease,
     scrollTrigger: { trigger: '#footer', start: 'top 90%', once: true }
   });
@@ -4061,60 +4075,76 @@ function ambientWind() {
 
 /* ── GALLERY · FOTOS QUE CAEN ───────────────────────── */
 function initGallery() {
-  (function(){
-    const finalRotations = [-6, 3, -5, 4, -3];
-    const photos = [
-      {el: document.getElementById('dropP1'), rot: finalRotations[0]},
-      {el: document.getElementById('dropP2'), rot: finalRotations[1]},
-      {el: document.getElementById('dropP3'), rot: finalRotations[2]},
-      {el: document.getElementById('dropP4'), rot: finalRotations[3]},
-      {el: document.getElementById('dropP5'), rot: finalRotations[4]},
-    ].filter(p => p.el);
+  /* Rueda 3D con arrastre e inercia (de boda-veronica-y-andres).
+     El radio se calcula del ancho real: con radio fijo las tarjetas de los
+     costados se salen de la pantalla en móviles estrechos. */
+  var scene = document.getElementById('wheelScene');
+  var ring  = document.getElementById('wheelRing');
+  if (!scene || !ring) return;
+  var cards = ring.querySelectorAll('.wheel-card');
+  var n = cards.length;
+  if (!n) return;
 
-    ScrollTrigger.create({
-      trigger: '#dropStage', start: 'top 75%', once: true,
-      onEnter() {
-        photos.forEach((p, i) => {
-          gsap.set(p.el, {
-            y: -(window.innerHeight * 0.75 + 200),
-            rotation: p.rot + (i % 2 === 0 ? 35 : -30),
-            opacity: 1,
-            zIndex: i + 1,
-          });
-          gsap.to(p.el, {
-            y: 0,
-            rotation: p.rot,
-            duration: 1.2 + i * 0.05,
-            ease: 'power2.in',
-            delay: i * 0.6,
-            onComplete() {
-              gsap.to(p.el, {y: -10, rotation: p.rot * 0.6, duration: .15, ease: 'power1.out',
-                onComplete() { gsap.to(p.el, {y: 0, rotation: p.rot, duration: .2, ease: 'power2.inOut'}); }
-              });
-              gsap.to(p.el, {boxShadow: `0 ${28 + i*6}px ${70 + i*10}px rgba(42,51,37,.28)`, duration: .25});
-            }
-          });
-        });
-      }
+  var radius = 210;
+  function layout(){
+    var w = scene.getBoundingClientRect().width || window.innerWidth;
+    radius = Math.max(150, Math.min(210, w * 0.52));
+    cards.forEach(function(card, i){
+      card.style.transform = 'rotateY(' + (360 / n * i) + 'deg) translateZ(' + radius + 'px)';
     });
+  }
+  layout();
+  var rzT;
+  window.addEventListener('resize', function(){
+    clearTimeout(rzT); rzT = setTimeout(layout, 140);
+  }, { passive:true });
 
-    photos.forEach((p, i) => {
-      p.el.addEventListener('click', () => {
-        const focused = p.el.classList.contains('focused');
-        photos.forEach((pp, j) => {
-          pp.el.classList.remove('focused');
-          gsap.to(pp.el, {scale: 1, zIndex: j + 1, duration: .35, ease: 'power2.out'});
-        });
-        if (!focused) {
-          p.el.classList.add('focused');
-          gsap.to(p.el, {scale: 1.1, zIndex: 10, duration: .35, ease: 'back.out(1.5)'});
-        }
-      });
-    });
+  var rot = 0, vel = 0, isDrag = false, startX = 0, startRot = 0, lastX = 0, rafId = null;
+  function setRot(){ gsap.set(ring, { rotateY: rot }); }
+  setRot();
+
+  function inertia(){
+    if (isDrag) return;
+    rot += vel;
+    vel *= 0.94;
+    setRot();
+    if (Math.abs(vel) > 0.05) rafId = requestAnimationFrame(inertia);
+  }
+  function pointerDown(x){
+    isDrag = true; ring.classList.add('dragging');
+    startX = x; lastX = x; startRot = rot; vel = 0;
+    if (rafId) cancelAnimationFrame(rafId);
+  }
+  function pointerMove(x){
+    if (!isDrag) return;
+    rot = startRot + (x - startX) * 0.45;
+    vel = (x - lastX) * 0.5;
+    lastX = x;
+    setRot();
+  }
+  function pointerUp(){
+    if (!isDrag) return;
+    isDrag = false; ring.classList.remove('dragging');
+    rafId = requestAnimationFrame(inertia);
+  }
+
+  ring.addEventListener('mousedown', function(e){ e.preventDefault(); pointerDown(e.clientX); });
+  window.addEventListener('mousemove', function(e){ pointerMove(e.clientX); });
+  window.addEventListener('mouseup', pointerUp);
+  ring.addEventListener('touchstart', function(e){ pointerDown(e.touches[0].clientX); }, { passive:true });
+  ring.addEventListener('touchmove',  function(e){ pointerMove(e.touches[0].clientX); }, { passive:true });
+  ring.addEventListener('touchend', pointerUp);
+
+  /* Giro lento hasta el primer arrastre */
+  var auto = true;
+  (function spin(){
+    if (auto && !isDrag) { rot += 0.12; setRot(); }
+    requestAnimationFrame(spin);
   })();
+  ring.addEventListener('mousedown',  function(){ auto = false; });
+  ring.addEventListener('touchstart', function(){ auto = false; });
 }
 
-/* ── TOAST ───────────────────────────────────────────── */
 function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
