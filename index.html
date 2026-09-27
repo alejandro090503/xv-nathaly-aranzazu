@@ -26,16 +26,52 @@
   <style>
 /* ── TOKENS ───────────────────────────────────────────── */
 :root {
-  --peach:        #586B50;             /* durazno profundo (texto/acento fuerte) */
-  --peach-lt:     #bbddb6;             /* highlight claro */
-  --peach-accent: #b5c5b2;             /* durazno original (swatches) */
+  --peach:        #586B50;             /* VERDE principal (texto/acento fuerte) */
+  --peach-lt:     #bbddb6;             /* verde highlight claro */
+  --peach-accent: #b5c5b2;             /* sage (swatches) */
   --peach-dim:    rgba(88,107,80,.14);
-  --cream:        #2A3325;             /* cacao oscuro — texto principal */
+  --green-deep:   #3C4A33;             /* verde profundo — titulos */
+  --cream:        #2A3325;             /* verde casi negro — texto principal */
+  /* ── CHAMPAN METALICO (acento secundario pulido) ── */
+  --champ:        #F7E7CE;
+  --champ-hi:     #FFFDF6;             /* brillo especular */
+  --champ-deep:   #C9A96A;             /* sombra del metal */
+  --champ-grad:   linear-gradient(115deg,
+                    #C9A96A 0%, #E8D2A6 12%, #FFFDF6 24%, #F0DDB6 34%,
+                    #C9A96A 46%, #FBF1DC 58%, #D9BD86 70%, #FFF8E8 82%,
+                    #C9A96A 100%);
+  --champ-line:   linear-gradient(90deg,
+                    transparent 0%, rgba(201,169,106,.55) 14%, #E8D2A6 32%,
+                    #FFFDF6 50%, #E8D2A6 68%, rgba(201,169,106,.55) 86%,
+                    transparent 100%);
   --ink:          #FFFFFF;             /* blanco puro — bg principal */
   --ink2:         #f9ecd4;             /* cream rosado — bg secundario */
   --ink3:         #F7E7CE;             /* cream más definido — bg terciario */
   --spring:       cubic-bezier(.34,1.56,.64,1);
   --smooth:       cubic-bezier(.25,.46,.45,.94);
+}
+
+/* ── CHAMPAN PULIDO · utilidades ───────────────────────── */
+/* Texto con relleno metalico y barrido lento (el brillo recorre la letra). */
+.champ-text{
+  background:var(--champ-grad);
+  background-size:280% auto;
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  animation:champFlow 9s ease-in-out infinite;
+}
+@keyframes champFlow{
+  0%,100%{background-position:0% center}
+  50%    {background-position:100% center}
+}
+/* Filete metalico horizontal (divisores, bordes superiores de card). */
+.champ-rule{
+  background:var(--champ-line);
+  background-size:220% auto;
+  animation:champFlow 11s ease-in-out infinite;
+}
+@media(prefers-reduced-motion:reduce){
+  .champ-text,.champ-rule{animation:none!important}
 }
 
 /* ── RESET ────────────────────────────────────────────── */
@@ -169,23 +205,76 @@ body.envelope-locked{overflow:hidden;height:100vh}
   transition:width .08s linear;pointer-events:none;
 }
 
-/* ── MUSIC BTN ────────────────────────────────────────── */
+/* ── MUSICA · DISCO DE VINILO ─────────────────────────── */
 .music-btn{
-  position:fixed;bottom:22px;right:22px;width:46px;height:46px;
-  border-radius:50%;background:rgba(255,255,255,.85);
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  border:1px solid rgba(88,107,80,.4);color:var(--peach);font-size:18px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;z-index:999;
-  box-shadow:0 4px 24px rgba(0,0,0,.45);
-  transition:all .3s var(--spring);
+  position:fixed;bottom:22px;right:22px;z-index:999;
+  width:70px;height:70px;padding:0;border:none;background:transparent;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+  filter:drop-shadow(0 6px 18px rgba(42,51,37,.38));
+  transition:transform .3s var(--spring);
 }
-.music-btn:active{transform:scale(.88)}
-.music-btn.on{border-color:var(--peach);background:rgba(88,107,80,.14);
-  animation:pulse 2s ease-in-out infinite}
-@keyframes pulse{
-  0%,100%{box-shadow:0 0 0 0 rgba(88,107,80,.35),0 4px 24px rgba(0,0,0,.45)}
-  50%{box-shadow:0 0 0 9px rgba(88,107,80,0),0 4px 24px rgba(0,0,0,.45)}
+.music-btn:active{transform:scale(.9)}
+.music-btn:focus-visible{outline:2px solid var(--champ-deep);outline-offset:6px;border-radius:50%}
+/* Aro champan que late mientras suena */
+.music-btn::before{
+  content:'';position:absolute;inset:-7px;border-radius:50%;
+  border:1.5px solid rgba(201,169,106,.6);
+  opacity:0;pointer-events:none;transition:opacity .35s;
+}
+.music-btn.on::before{opacity:1;animation:vinylRing 2.4s ease-out infinite}
+@keyframes vinylRing{
+  0%  {box-shadow:0 0 0 0    rgba(201,169,106,.45)}
+  65% {box-shadow:0 0 0 14px rgba(201,169,106,0)}
+  100%{box-shadow:0 0 0 0    rgba(201,169,106,0)}
+}
+/* El disco: surcos concentricos sobre negro verdoso */
+.vinyl{
+  width:70px;height:70px;border-radius:50%;
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(circle at 30% 28%, rgba(255,255,255,.12) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%,
+      #141A10 0%,  #141A10 33%,
+      rgba(255,255,255,.07) 33.5%, #141A10 34%,
+      #141A10 37%, rgba(255,255,255,.04) 37.5%, #141A10 38%,
+      #141A10 41%, rgba(255,255,255,.06) 41.5%, #141A10 42%,
+      #141A10 45%, rgba(255,255,255,.04) 45.5%, #141A10 46%,
+      #141A10 49%, rgba(255,255,255,.05) 49.5%, #141A10 50%,
+      #141A10 53%, rgba(255,255,255,.04) 53.5%, #141A10 54%,
+      #141A10 57%, rgba(255,255,255,.06) 57.5%, #141A10 58%,
+      #141A10 61%, rgba(255,255,255,.04) 61.5%, #141A10 62%,
+      #141A10 65%, rgba(255,255,255,.05) 65.5%, #141A10 66%,
+      #141A10 69%, rgba(255,255,255,.04) 69.5%, #141A10 70%,
+      #141A10 73%, rgba(255,255,255,.06) 73.5%, #141A10 74%,
+      #141A10 78%, rgba(255,255,255,.04) 78.5%, #141A10 79%,
+      #141A10 83%, rgba(255,255,255,.05) 83.5%, #141A10 84%,
+      #141A10 88%, rgba(255,255,255,.04) 88.5%, #141A10 89%,
+      #141A10 93%, rgba(255,255,255,.06) 93.5%, #141A10 94%,
+      #141A10 100%);
+  animation:vinylSpin 3.8s linear infinite paused;
+}
+.music-btn.on .vinyl{animation-play-state:running}
+@keyframes vinylSpin{to{transform:rotate(360deg)}}
+/* Etiqueta central: champan metalico real (conico, no plano) */
+.vinyl-label{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:27px;height:27px;border-radius:50%;
+  background:
+    radial-gradient(circle at 38% 33%, rgba(255,255,255,.3) 0%, transparent 55%),
+    conic-gradient(from 0deg,#C9A96A,#F7E7CE 16%,#FFFDF6 30%,#E8D2A6 46%,
+                   #C9A96A 60%,#FBF1DC 76%,#D9BD86 88%,#C9A96A);
+  box-shadow:0 0 0 1.5px rgba(88,107,80,.55), inset 0 1px 3px rgba(255,255,255,.35);
+  display:flex;align-items:center;justify-content:center;
+}
+.vinyl-hole{
+  width:7px;height:7px;border-radius:50%;background:#0D1209;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.8);flex-shrink:0;
+}
+/* Pausado: el disco se apaga un poco */
+.music-btn:not(.on) .vinyl{filter:saturate(.75) brightness(.92)}
+@media(prefers-reduced-motion:reduce){
+  .music-btn.on .vinyl{animation:none}
+  .music-btn.on::before{animation:none}
 }
 
 /* ── TOAST ────────────────────────────────────────────── */
@@ -213,18 +302,24 @@ body.envelope-locked{overflow:hidden;height:100vh}
   vertical-align:middle;margin:0 .9em;opacity:.85;
   transform:translateY(-1px);
 }
-.ttl{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;text-align:center;color:var(--cream);line-height:1.25;margin-top:6px}
-/* Línea decorativa: olivo→dorado→olivo (degradado bicolor sutil) */
+.ttl{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;text-align:center;color:var(--green-deep);line-height:1.25;margin-top:6px}
+/* Filete divisor: champan pulido con brillo que recorre la linea */
 .gline{
-  width:64px;height:1px;
-  background:linear-gradient(to right,
-    transparent 0%,
-    rgba(88,107,80,.6) 25%,
-    rgba(217,196,154,.85) 50%,
-    rgba(88,107,80,.6) 75%,
-    transparent 100%);
+  width:82px;height:2px;border-radius:2px;
+  background:var(--champ-line);
+  background-size:220% auto;
+  animation:champFlow 11s ease-in-out infinite;
   margin:18px auto;
+  position:relative;
 }
+/* Punto central verde: ancla el acento principal sobre el metal */
+.gline::after{
+  content:'';position:absolute;left:50%;top:50%;
+  width:5px;height:5px;margin:-2.5px 0 0 -2.5px;
+  border-radius:50%;background:var(--peach);
+  box-shadow:0 0 0 2.5px var(--ink);
+}
+@media(prefers-reduced-motion:reduce){.gline{animation:none}}
 
 .btn{
   display:flex;align-items:center;justify-content:center;gap:9px;
@@ -257,21 +352,76 @@ body.envelope-locked{overflow:hidden;height:100vh}
   position:absolute;top:-20%;left:0;right:0;bottom:-20%;
   z-index:0;will-change:transform;
 }
-.h-bg img{
-  width:100%;height:100%;object-fit:cover;object-position:center 40%;
-  filter:brightness(1.18) saturate(.75) contrast(.88);
-  display:block;
+/* ── ESCENARIO DEL HERO (sin fotografía) ──────────────────
+   Base de papel champán + tres halos de color que derivan muy lento
+   (transform puro) + hilos de seda que respiran. */
+.h-bg{
+  background:
+    radial-gradient(120% 78% at 50% 0%,  #FFFFFF 0%, #FEFBF4 38%, #F9ECD4 100%),
+    linear-gradient(180deg, #FFFFFF 0%, #F7E7CE 100%);
+}
+.h-aurora{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.h-blob{
+  position:absolute;display:block;border-radius:50%;
+  filter:blur(38px);will-change:transform;
+}
+.h-blob-1{
+  width:64%;aspect-ratio:1;left:-14%;top:12%;
+  background:radial-gradient(circle,rgba(187,221,182,.85) 0%,rgba(187,221,182,.28) 48%,transparent 72%);
+  animation:blobDrift1 26s ease-in-out infinite;
+}
+.h-blob-2{
+  width:58%;aspect-ratio:1;right:-12%;top:30%;
+  background:radial-gradient(circle,rgba(247,231,206,.95) 0%,rgba(201,169,106,.34) 46%,transparent 72%);
+  animation:blobDrift2 32s ease-in-out infinite;
+}
+.h-blob-3{
+  width:50%;aspect-ratio:1;left:22%;bottom:4%;
+  background:radial-gradient(circle,rgba(181,197,178,.7) 0%,rgba(88,107,80,.16) 50%,transparent 74%);
+  animation:blobDrift3 38s ease-in-out infinite;
+}
+@keyframes blobDrift1{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  33%    {transform:translate3d(9%,6%,0) scale(1.1)}
+  66%    {transform:translate3d(-5%,11%,0) scale(.95)}
+}
+@keyframes blobDrift2{
+  0%,100%{transform:translate3d(0,0,0) scale(1.04)}
+  40%    {transform:translate3d(-11%,8%,0) scale(.92)}
+  75%    {transform:translate3d(-4%,-7%,0) scale(1.12)}
+}
+@keyframes blobDrift3{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  50%    {transform:translate3d(7%,-9%,0) scale(1.14)}
+}
+/* Hilos de seda: el trazo se dibuja y se borra en bucle */
+.h-silk{position:absolute;inset:0;pointer-events:none;opacity:.9}
+.h-silk svg{width:100%;height:100%;display:block}
+.h-silk path{stroke-dasharray:560;stroke-dashoffset:560;animation:silkDraw 14s ease-in-out infinite}
+.silk-2{animation-delay:-3.5s!important}
+.silk-3{animation-delay:-7s!important}
+.silk-4{animation-delay:-10.5s!important}
+@keyframes silkDraw{
+  0%  {stroke-dashoffset:560;opacity:0}
+  18% {opacity:.9}
+  55% {stroke-dashoffset:0;opacity:.9}
+  82% {stroke-dashoffset:-560;opacity:0}
+  100%{stroke-dashoffset:-560;opacity:0}
+}
+@media(prefers-reduced-motion:reduce){
+  .h-blob,.h-silk path{animation:none!important}
+  .h-silk path{stroke-dashoffset:0}
 }
 
-/* Gradient overlay — ajustado para foto nocturna */
+/* Velo: solo asienta el pie de la portada contra la sección siguiente */
 .h-ov{
-  position:absolute;inset:0;z-index:1;
+  position:absolute;inset:0;z-index:1;pointer-events:none;
   background:
     linear-gradient(to bottom,
-      rgba(249,236,212,.30) 0%,
-      rgba(249,236,212,.15) 32%,
-      rgba(249,236,212,.55) 62%,
-      rgba(249,236,212,.97) 100%);
+      rgba(255,255,255,.18) 0%,
+      rgba(255,255,255,0)   30%,
+      rgba(255,255,255,.55) 78%,
+      #FFFFFF 100%);
 }
 /* Halo radial detrás del nombre para mayor visibilidad */
 .h-ov::after{
@@ -282,18 +432,36 @@ body.envelope-locked{overflow:hidden;height:100vh}
   pointer-events:none;
 }
 
-/* Decorative border frame */
+/* Marco doble con esquinas de champán pulido */
 .h-frame{
-  position:absolute;top:20px;left:20px;right:20px;bottom:20px;
-  border:1px solid rgba(88,107,80,.24);z-index:2;pointer-events:none;
+  position:absolute;top:18px;left:18px;right:18px;bottom:18px;
+  border:1px solid rgba(88,107,80,.3);z-index:2;pointer-events:none;
 }
-.h-frame::before,.h-frame::after{
-  content:'✦';position:absolute;color:var(--peach);font-size:11px;
-  opacity:.6;line-height:1;
-  background:var(--ink2);padding:0 8px;
+/* Segundo filete interior, más fino */
+.h-frame::before{
+  content:'';position:absolute;inset:7px;
+  border:1px solid rgba(201,169,106,.5);
 }
-.h-frame::before{top:-6px;left:50%;transform:translateX(-50%)}
-.h-frame::after{bottom:-6px;left:50%;transform:translateX(-50%)}
+.h-frame::after{
+  content:'✦';position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);
+  color:var(--champ-deep);font-size:12px;line-height:1;
+  background:#FFFFFF;padding:0 10px;
+}
+/* Escuadras metálicas en las cuatro esquinas */
+.h-corner{
+  position:absolute;width:26px;height:26px;display:block;
+}
+.h-corner::before,.h-corner::after{
+  content:'';position:absolute;background:var(--champ-line);
+  background-size:220% auto;animation:champFlow 11s ease-in-out infinite;
+}
+.h-corner::before{width:100%;height:2px;top:0;left:0}
+.h-corner::after{width:2px;height:100%;top:0;left:0}
+.h-corner-tl{top:-2px;left:-2px}
+.h-corner-tr{top:-2px;right:-2px;transform:scaleX(-1)}
+.h-corner-bl{bottom:-2px;left:-2px;transform:scaleY(-1)}
+.h-corner-br{bottom:-2px;right:-2px;transform:scale(-1,-1)}
+@media(prefers-reduced-motion:reduce){.h-corner::before,.h-corner::after{animation:none}}
 
 /* Anillos decorativos concéntricos detrás del texto */
 .h-rings{
@@ -380,9 +548,8 @@ body.envelope-locked{overflow:hidden;height:100vh}
   color:var(--cream);
   display:block;
   text-shadow:
-    0 2px 22px rgba(255,255,255,.9),
-    0 4px 38px rgba(88,107,80,.35),
-    0 1px 2px rgba(62,74,56,.25);
+    0 2px 20px rgba(255,255,255,.95),
+    0 6px 34px rgba(88,107,80,.18);
   will-change:transform,filter;
   transform-origin:center center;
   white-space:nowrap;
@@ -393,25 +560,23 @@ body.envelope-locked{overflow:hidden;height:100vh}
   font-family:'Great Vibes',cursive;
   font-size:62px;
   display:block;
-  /* Ampersand con gradiente dorado→olivo, fade alterno entre ambos */
-  background:linear-gradient(135deg,
-    #C2AC81 0%,
-    #D9C49A 28%,
-    #FFF7E8 50%,
-    #D9C49A 72%,
-    #586B50 100%);
+  /* Champán pulido: el brillo recorre la pieza en bucle */
+  background:var(--champ-grad);
+  background-size:280% auto;
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
+  -webkit-text-fill-color:transparent;
   filter:drop-shadow(0 2px 8px rgba(255,247,232,.55))
          drop-shadow(0 0 18px rgba(217,196,154,.35));
-  will-change:transform;
-  animation:hAmpShimmer 6s ease-in-out infinite;
+  will-change:background-position;
+  animation:champFlow 9s ease-in-out infinite, hAmpShimmer 6s ease-in-out infinite;
 }
 @keyframes hAmpShimmer{
-  0%,100%{filter:drop-shadow(0 2px 8px rgba(255,247,232,.55)) drop-shadow(0 0 18px rgba(217,196,154,.35))}
-  50%    {filter:drop-shadow(0 2px 12px rgba(255,247,232,.75)) drop-shadow(0 0 28px rgba(217,196,154,.55))}
+  0%,100%{filter:drop-shadow(0 2px 8px rgba(255,253,246,.6)) drop-shadow(0 0 18px rgba(201,169,106,.4))}
+  50%    {filter:drop-shadow(0 2px 12px rgba(255,253,246,.85)) drop-shadow(0 0 28px rgba(201,169,106,.6))}
 }
+@media(prefers-reduced-motion:reduce){.h-amp{animation:none}}
 
 /* Líneas de viento laterales — delgadas */
 .h-name-wind-line{
@@ -768,14 +933,14 @@ body.envelope-locked{overflow:hidden;height:100vh}
 }
 /* Carril base: línea muy sutil, marca el recorrido sin completarlo */
 .tl-svg-bg{
-  stroke:rgba(163,140,99,.22);
+  stroke:rgba(88,107,80,.26);
   stroke-width:1;fill:none;
   stroke-dasharray:2 5;
   stroke-linecap:round;
 }
 /* CAPA 1 — halo dorado externo (stroke ancho con baja opacidad) */
 .tl-svg-halo{
-  stroke:#D9C49A;
+  stroke:#8CA67E;
   stroke-width:11;
   stroke-linecap:round;
   stroke-linejoin:round;
@@ -784,7 +949,7 @@ body.envelope-locked{overflow:hidden;height:100vh}
 }
 /* CAPA 2 — beam intermedio (más cálido y brillante) */
 .tl-svg-beam{
-  stroke:#FFF7E8;
+  stroke:#D6E6CC;
   stroke-width:5.5;
   stroke-linecap:round;
   stroke-linejoin:round;
@@ -801,7 +966,7 @@ body.envelope-locked{overflow:hidden;height:100vh}
 }
 /* CAPA 4 — núcleo blanco (highlight central) */
 .tl-svg-core{
-  stroke:rgba(255,247,232,.9);
+  stroke:rgba(236,246,230,.92);
   stroke-width:.85;
   stroke-linecap:round;
   stroke-linejoin:round;
@@ -1208,6 +1373,19 @@ body.envelope-locked{overflow:hidden;height:100vh}
   object-fit:cover;object-position:center top;
   border-radius:2px;display:block;pointer-events:none;
 }
+/* Marco en espera: papel champán con una flor de trazo verde */
+.drop-ph{
+  width:100%;height:100%;border-radius:2px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--peach);
+  background:
+    repeating-linear-gradient(135deg,
+      rgba(201,169,106,.09) 0px, rgba(201,169,106,.09) 1px,
+      transparent 1px, transparent 7px),
+    linear-gradient(160deg,#FFFDF7 0%,#F7E7CE 100%);
+  box-shadow:inset 0 0 0 1px rgba(201,169,106,.35);
+}
+.drop-ph svg{width:38%;max-width:44px;opacity:.5}
 .drop-photo-label{
   position:absolute;bottom:7px;left:0;right:0;
   font-family:'Cormorant Garamond',serif;font-style:italic;
@@ -1230,6 +1408,70 @@ body.envelope-locked{overflow:hidden;height:100vh}
 
 @media(prefers-reduced-motion:reduce){
   .drop-photo{transition:none!important}
+}
+
+
+/* ── LLUVIA DE SOBRES · sobre interactivo (de jeffersson-vanessa) ── */
+#gifts{overflow:hidden}
+.env-rain{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.env-rain-item{position:absolute;top:-46px;will-change:transform;opacity:0}
+#gifts .env-stage{position:relative;z-index:1}
+.env-interactive{
+  display:flex;flex-direction:column;align-items:center;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;outline:none;border:none;background:none;
+  padding:0;margin:26px auto 0;opacity:0;
+}
+.env-interactive:focus-visible{outline:2px solid var(--peach);outline-offset:10px;border-radius:12px}
+.env-body{
+  perspective:700px;position:relative;width:min(258px,74vw);aspect-ratio:260/200;
+  filter:drop-shadow(0 10px 26px rgba(42,51,37,.22));
+}
+.env-body svg.env-svg{width:100%;height:100%;display:block}
+.env-flap-wrap{
+  position:absolute;top:23%;left:6.9%;width:86.2%;height:43%;
+  transform-origin:top center;transform-style:preserve-3d;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  transition:transform .65s cubic-bezier(.4,0,.2,1);pointer-events:none;z-index:2;
+}
+.env-interactive.open .env-flap-wrap{transform:rotateX(-175deg)}
+.env-seal{
+  position:absolute;top:52%;left:50%;width:23%;aspect-ratio:1;
+  transform:translate(-50%,-50%);z-index:3;pointer-events:none;
+  transition:opacity .35s ease,transform .5s cubic-bezier(.4,0,.2,1);
+}
+.env-interactive.open .env-seal{opacity:0;transform:translate(-50%,-50%) scale(.7)}
+.env-open-content{
+  overflow:hidden;max-height:0;opacity:0;
+  transition:max-height .55s .3s ease,opacity .4s .38s ease;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  padding:0 16px;text-align:center;pointer-events:none;
+}
+.env-interactive.open .env-open-content{max-height:340px;opacity:1;pointer-events:auto;margin-top:20px}
+.env-mailbox-icon{width:42px;height:42px;color:var(--peach);margin-top:6px}
+.env-title{
+  font-family:'Great Vibes',cursive;font-size:clamp(30px,8.5vw,38px);
+  line-height:1.4;padding:.08em 0;
+}
+.env-desc{
+  font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;font-style:italic;
+  color:var(--cream);opacity:.88;line-height:1.75;max-width:300px;
+}
+.env-note{
+  font-size:14px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--peach);opacity:.85;margin-top:4px;
+}
+.env-tap-hint{
+  font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;
+  letter-spacing:.3em;text-transform:uppercase;color:var(--peach);
+  margin-top:18px;opacity:0;transition:opacity .5s ease;position:relative;z-index:1;
+}
+.env-tap-hint.show{opacity:.9;animation:envHintPulse 2.4s ease-in-out infinite}
+.env-interactive.open~.env-tap-hint{opacity:0!important;animation:none;pointer-events:none}
+@keyframes envHintPulse{0%,100%{opacity:.55}50%{opacity:1}}
+.env-body.landed{animation:envBreathe 3.6s ease-in-out infinite}
+@keyframes envBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
+@media(prefers-reduced-motion:reduce){
+  .env-body.landed,.env-tap-hint.show{animation:none!important}
 }
 
 /* ── RSVP ─────────────────────────────────────────────── */
@@ -2059,6 +2301,49 @@ section.has-sec-waves{padding-top:84px;padding-bottom:86px}
 .rsvp-editar-btn:active{background:rgba(88,107,80,.12)}
 .rsvp-editar-btn:disabled{opacity:.45;cursor:not-allowed}
 
+
+/* ══════════════════════════════════════════════════════════
+   CHAMPÁN PULIDO · superficies
+   Las secciones que ya venían en champán dejan de ser color plano:
+   llevan un satinado diagonal (luz → base → sombra → luz) y un filete
+   metálico arriba. Es background-image estático, no animación sobre
+   superficies grandes: así no se disparan capas compuestas en iOS.
+   ══════════════════════════════════════════════════════════ */
+#countdown,#calendar,#dresscode,#gallery,#gifts,#kids-policy,#footer{
+  background-image:
+    linear-gradient(118deg,
+      rgba(255,255,255,0)    0%,
+      rgba(255,255,255,.60) 14%,
+      rgba(255,253,246,.92) 27%,
+      rgba(224,201,159,.30) 41%,
+      rgba(255,255,255,.55) 55%,
+      rgba(208,180,129,.26) 69%,
+      rgba(255,253,246,.78) 83%,
+      rgba(255,255,255,0)  100%);
+  background-repeat:no-repeat;
+  background-size:cover;
+}
+/* Filete metálico superior — el canto pulido de cada superficie */
+#countdown,#calendar,#dresscode,#gallery,#gifts,#kids-policy{
+  border-top:2px solid transparent;
+  border-image:var(--champ-line) 1;
+}
+/* El footer cierra con el mismo canto */
+#footer{border-top:2px solid transparent;border-image:var(--champ-line) 1}
+
+/* Cards sobre champán: borde metálico en lugar del gris verdoso */
+.loc-card,.ls-card,.fam-card,.alb-qr-frame{
+  border-color:rgba(201,169,106,.45)!important;
+}
+
+/* ══════════════════════════════════════════════════════════
+   VERDE PRINCIPAL · el acento manda sobre el metal
+   ══════════════════════════════════════════════════════════ */
+.cd-num{color:var(--peach)}
+.loc-name{color:var(--green-deep)}
+.fam-ttl{color:var(--peach)}
+.env-title{filter:drop-shadow(0 1px 6px rgba(255,253,246,.8))}
+
 /* ══════════════════════════════════════════════════════════
    LEGIBILIDAD · invitados de todas las edades
    Solo font-size / font-weight / line-height / opacity.
@@ -2177,13 +2462,43 @@ body{font-weight:400}
 
 <!-- ═══════════════ 1. HERO ════════════════════════════ -->
 <section id="hero">
-  <!-- Background photo (parallax target) -->
+  <!-- Fondo compuesto (parallax target) — sin fotografía -->
   <div class="h-bg" id="heroBg">
-    <img src="hero.jpg"
-         alt="Nathaly Aranzazu" loading="eager" id="heroPic">
+    <div class="h-aurora" aria-hidden="true">
+      <span class="h-blob h-blob-1"></span>
+      <span class="h-blob h-blob-2"></span>
+      <span class="h-blob h-blob-3"></span>
+    </div>
+    <div class="h-silk" aria-hidden="true">
+      <svg viewBox="0 0 400 600" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="silkA" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%"   stop-color="#C9A96A" stop-opacity=".0"/>
+            <stop offset="45%"  stop-color="#C9A96A" stop-opacity=".55"/>
+            <stop offset="100%" stop-color="#C9A96A" stop-opacity=".0"/>
+          </linearGradient>
+          <linearGradient id="silkB" x1="1" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#586B50" stop-opacity=".0"/>
+            <stop offset="50%"  stop-color="#586B50" stop-opacity=".4"/>
+            <stop offset="100%" stop-color="#586B50" stop-opacity=".0"/>
+          </linearGradient>
+        </defs>
+        <g fill="none" stroke-linecap="round">
+          <path class="silk-1" d="M-40,150 C90,90 150,230 260,170 C340,126 380,196 460,160" stroke="url(#silkA)" stroke-width="1.1"/>
+          <path class="silk-2" d="M-40,205 C80,150 170,280 270,215 C350,163 390,236 460,205" stroke="url(#silkB)" stroke-width=".9"/>
+          <path class="silk-3" d="M-40,425 C90,370 160,500 265,440 C345,394 385,462 460,430" stroke="url(#silkA)" stroke-width="1"/>
+          <path class="silk-4" d="M-40,478 C100,420 165,548 270,492 C350,449 392,512 460,484" stroke="url(#silkB)" stroke-width=".85"/>
+        </g>
+      </svg>
+    </div>
   </div>
   <div class="h-ov"></div>
-  <div class="h-frame"></div>
+  <div class="h-frame">
+    <span class="h-corner h-corner-tl"></span>
+    <span class="h-corner h-corner-tr"></span>
+    <span class="h-corner h-corner-bl"></span>
+    <span class="h-corner h-corner-br"></span>
+  </div>
 
   <!-- Ondas de viento superior e inferior -->
   <div class="h-wave h-wave-top" aria-hidden="true">
@@ -2406,13 +2721,13 @@ body{font-weight:400}
     <svg class="tl-svg" id="tlSvg" preserveAspectRatio="none" aria-hidden="true">
       <defs>
         <linearGradient id="tlGoldStroke" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"  stop-color="#A38C63"/>
-          <stop offset="14%" stop-color="#C2AC81"/>
-          <stop offset="34%" stop-color="#EBD9B5"/>
-          <stop offset="50%" stop-color="#FFF7E8"/>
-          <stop offset="66%" stop-color="#EBD9B5"/>
-          <stop offset="86%" stop-color="#C2AC81"/>
-          <stop offset="100%" stop-color="#A38C63"/>
+          <stop offset="0%"  stop-color="#2F3D28"/>
+          <stop offset="14%" stop-color="#46583C"/>
+          <stop offset="34%" stop-color="#6E8560"/>
+          <stop offset="50%" stop-color="#A8C49B"/>
+          <stop offset="66%" stop-color="#6E8560"/>
+          <stop offset="86%" stop-color="#46583C"/>
+          <stop offset="100%" stop-color="#2F3D28"/>
         </linearGradient>
       </defs>
       <path class="tl-svg-bg"   id="tlPathBg"/>
@@ -2456,59 +2771,57 @@ body{font-weight:400}
 
 <!-- ═══════════════ 7. LLUVIA DE SOBRES ═══════════════ -->
 <section id="gifts">
-  <span class="lbl">Tu presencia es mi mejor regalo</span>
-  <h2 class="ttl">Lluvia de Sobres</h2>
-  <div class="gline"></div>
-  <p class="gf-sub">Una hermosa tradición para acompañar a Nathaly<br>en este nuevo capítulo.</p>
+  <div class="env-rain" id="envRain" aria-hidden="true"></div>
+  <div class="env-stage">
+    <span class="lbl">Tu presencia es mi mejor regalo</span>
+    <h2 class="ttl">Lluvia de Sobres</h2>
+    <div class="gline"></div>
 
-  <div class="ls-card">
-    <div class="ls-icon" aria-hidden="true">
-      <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="8" y="16" width="48" height="34" rx="2"/>
-        <path d="M8 18 L32 36 L56 18"/>
-        <path d="M8 50 L26 32 M56 50 L38 32" opacity=".55"/>
-        <circle cx="32" cy="36" r="1.4" fill="currentColor"/>
-      </svg>
-    </div>
-    <p class="ls-tagline">Si me quieres sorprender</p>
-    <button type="button" class="btn btn-olive ls-btn" onclick="openLsModal()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-      ¿Qué es la lluvia de sobres?
+    <button class="env-interactive" id="envGift" type="button" aria-label="Sobre — toca para abrir" aria-expanded="false">
+      <div class="env-body" id="envGiftBody">
+        <svg class="env-svg" viewBox="0 0 260 200" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="envPaper" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#FFFBF2"/><stop offset="100%" stop-color="#F7E7CE"/>
+            </linearGradient>
+          </defs>
+          <rect x="18" y="52" width="224" height="132" rx="8" fill="url(#envPaper)" stroke="rgba(88,107,80,.45)" stroke-width="1.4"/>
+          <path d="M18 184 L130 110 L242 184" stroke="rgba(88,107,80,.28)" stroke-width="1" fill="none"/>
+        </svg>
+        <div class="env-flap-wrap" aria-hidden="true">
+          <svg viewBox="0 0 224 86" preserveAspectRatio="none" style="width:100%;height:100%;display:block">
+            <defs>
+              <linearGradient id="envFlap" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0%" stop-color="#F7E7CE"/><stop offset="100%" stop-color="#FFFDF6"/>
+              </linearGradient>
+            </defs>
+            <path d="M0 0 L112 86 L224 0 Z" fill="url(#envFlap)" stroke="rgba(88,107,80,.45)" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <svg class="env-seal" viewBox="0 0 60 60" aria-hidden="true">
+          <circle cx="30" cy="30" r="28" fill="#586B50"/>
+          <circle cx="30" cy="30" r="28" fill="none" stroke="#3C4A33" stroke-width="2" opacity=".55"/>
+          <circle cx="30" cy="30" r="21.5" fill="none" stroke="#F0DDB6" stroke-width="1.1" opacity=".9"/>
+          <text x="30" y="38" text-anchor="middle" font-family="'Great Vibes', cursive" font-size="24" fill="#F7E7CE">NA</text>
+        </svg>
+      </div>
+      <div class="env-open-content" aria-live="polite">
+        <svg class="env-mailbox-icon" viewBox="0 0 52 52" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <rect x="8" y="22" width="36" height="24" rx="5"/>
+          <path d="M8 30 Q26 38 44 30"/>
+          <rect x="18" y="8" width="16" height="16" rx="2"/>
+          <path d="M18 8 Q26 3 34 8"/>
+          <rect x="20" y="28" width="12" height="2.5" rx="1.25" fill="currentColor" stroke="none" opacity=".4"/>
+        </svg>
+        <p class="env-title champ-text">Tu Presencia es Mi Regalo</p>
+        <p class="env-desc">El día del evento habrá una urna donde podrás depositar tu sobre con mucho cariño.</p>
+        <p class="env-note">Encontrarás el buzón en la recepción</p>
+      </div>
     </button>
+    <p class="env-tap-hint" id="envGiftHint">Toca para abrir</p>
   </div>
 </section>
 
-<!-- Modal: explicación de la tradición -->
-<div id="lsModal" class="ls-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="lsModalTitle">
-  <div class="ls-modal-backdrop" onclick="closeLsModal()"></div>
-  <div class="ls-modal-card" role="document">
-    <button class="ls-modal-close" type="button" onclick="closeLsModal()" aria-label="Cerrar">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
-    <div class="ls-modal-ico" aria-hidden="true">
-      <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="8" y="16" width="48" height="34" rx="2"/>
-        <path d="M8 18 L32 36 L56 18"/>
-      </svg>
-    </div>
-    <h3 id="lsModalTitle" class="ls-modal-ttl"><em>La</em> Lluvia de Sobres</h3>
-    <div class="ls-modal-rule" aria-hidden="true"></div>
-    <p class="ls-modal-text">
-      Es una hermosa tradición en la que, con todo cariño, los invitados acompañan
-      a la quinceañera entregándole un pequeño detalle dentro de un sobre el día del evento.
-    </p>
-    <p class="ls-modal-text">
-      No esperamos nada en particular &mdash; solo te lo compartimos por si te apetece
-      sumarte a este lindo gesto que acompaña a Nathaly en esta nueva etapa.
-    </p>
-    <p class="ls-modal-quote">
-      <span class="ls-quote-mark">«</span>
-      Tu presencia es mi mayor regalo;<br>cualquier otro detalle, será atesorado con amor.
-      <span class="ls-quote-mark">»</span>
-    </p>
-    <p class="ls-modal-note">Encontrarás un buzón en la recepción</p>
-  </div>
-</div>
 
 
 <!-- ═══════════════ 8. ÁLBUM COMPARTIDO ══════════════ -->
@@ -2583,32 +2896,32 @@ body{font-weight:400}
   <span class="lbl">Mi historia</span>
   <h2 class="ttl">Galería</h2>
   <div class="gline"></div>
-  <p class="gal-sub"><em>Momentos que atesoro</em></p>
+  <p class="gal-sub"><em>Momentos que atesoro — muy pronto aquí</em></p>
 
   <div class="drop-stage" id="dropStage">
     <div class="drop-photo drop-photo-1" id="dropP1">
-      <img src="g1.jpg" alt="Nathaly Aranzazu · foto 1" loading="lazy">
+      <div class="drop-ph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="3.2"/><path d="M20 16.8 Q16 11 20 6 Q24 11 20 16.8Z"/><path d="M23.2 20 Q29 16 34 20 Q29 24 23.2 20Z"/><path d="M20 23.2 Q24 29 20 34 Q16 29 20 23.2Z"/><path d="M16.8 20 Q11 24 6 20 Q11 16 16.8 20Z"/></svg></div>
       <span class="drop-photo-label">Sonrisas</span>
     </div>
     <div class="drop-photo drop-photo-2" id="dropP2">
-      <img src="g2.jpg" alt="Nathaly Aranzazu · foto 2" loading="lazy">
+      <div class="drop-ph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="3.2"/><path d="M20 16.8 Q16 11 20 6 Q24 11 20 16.8Z"/><path d="M23.2 20 Q29 16 34 20 Q29 24 23.2 20Z"/><path d="M20 23.2 Q24 29 20 34 Q16 29 20 23.2Z"/><path d="M16.8 20 Q11 24 6 20 Q11 16 16.8 20Z"/></svg></div>
       <span class="drop-photo-label">Mi historia</span>
     </div>
     <div class="drop-photo drop-photo-3" id="dropP3">
-      <img src="g3.jpg" alt="Nathaly Aranzazu · foto 3" loading="lazy">
+      <div class="drop-ph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="3.2"/><path d="M20 16.8 Q16 11 20 6 Q24 11 20 16.8Z"/><path d="M23.2 20 Q29 16 34 20 Q29 24 23.2 20Z"/><path d="M20 23.2 Q24 29 20 34 Q16 29 20 23.2Z"/><path d="M16.8 20 Q11 24 6 20 Q11 16 16.8 20Z"/></svg></div>
       <span class="drop-photo-label">Momentos</span>
     </div>
     <div class="drop-photo drop-photo-4" id="dropP4">
-      <img src="g4.jpg" alt="Nathaly Aranzazu · foto 4" loading="lazy">
+      <div class="drop-ph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="3.2"/><path d="M20 16.8 Q16 11 20 6 Q24 11 20 16.8Z"/><path d="M23.2 20 Q29 16 34 20 Q29 24 23.2 20Z"/><path d="M20 23.2 Q24 29 20 34 Q16 29 20 23.2Z"/><path d="M16.8 20 Q11 24 6 20 Q11 16 16.8 20Z"/></svg></div>
       <span class="drop-photo-label">Recuerdos</span>
     </div>
     <div class="drop-photo drop-photo-5" id="dropP5">
-      <img src="g5.jpg" alt="Nathaly Aranzazu · foto 5" loading="lazy">
+      <div class="drop-ph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="3.2"/><path d="M20 16.8 Q16 11 20 6 Q24 11 20 16.8Z"/><path d="M23.2 20 Q29 16 34 20 Q29 24 23.2 20Z"/><path d="M20 23.2 Q24 29 20 34 Q16 29 20 23.2Z"/><path d="M16.8 20 Q11 24 6 20 Q11 16 16.8 20Z"/></svg></div>
       <span class="drop-photo-label">De noche</span>
     </div>
   </div>
 
-  <span class="drop-hint" id="dropHint">Toca cada foto para enfocarla</span>
+  <span class="drop-hint" id="dropHint">Las fotos de Nathaly se agregarán muy pronto</span>
 </section>
 
 
@@ -3215,8 +3528,8 @@ const mBtn = document.getElementById('musicBtn');
 let playing = false;
 
 function toggleMusic() {
-  if (playing) { aud.pause(); mBtn.innerHTML='♪'; mBtn.classList.remove('on'); }
-  else { aud.play().catch(()=>{}); mBtn.innerHTML='♬'; mBtn.classList.add('on'); }
+  if (playing) { aud.pause(); mBtn.classList.remove('on'); }
+  else { aud.play().catch(()=>{}); mBtn.classList.add('on'); }
   playing = !playing;
 }
 
@@ -3439,24 +3752,98 @@ document.querySelectorAll('input[name="att"]').forEach(r => {
   });
 })();
 
-/* ── Lluvia de Sobres modal ─────────────────────────────── */
-function openLsModal(){
-  const m = document.getElementById('lsModal');
-  if (!m) return;
-  m.classList.add('show');
-  m.setAttribute('aria-hidden','false');
-  document.body.style.overflow = 'hidden';
-}
-function closeLsModal(){
-  const m = document.getElementById('lsModal');
-  if (!m) return;
-  m.classList.remove('show');
-  m.setAttribute('aria-hidden','true');
-  document.body.style.overflow = '';
-}
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeLsModal();
-});
+/* ── LLUVIA DE SOBRES · caen hasta que la sección se centra ───── */
+(function(){
+  var sec=document.getElementById('gifts'),rain=document.getElementById('envRain'),
+      btn=document.getElementById('envGift'),body=document.getElementById('envGiftBody'),
+      hint=document.getElementById('envGiftHint');
+  if(!sec||!rain||!btn)return;
+  var raining=true,landed=false,spawnCall=null,alive=0;
+  var MAX_ALIVE=18;
+
+  function makeEnvelope(){
+    if(alive>=MAX_ALIVE)return;
+    alive++;
+    var el=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    el.setAttribute('viewBox','0 0 34 24');
+    el.setAttribute('class','env-rain-item');
+    var w=16+Math.random()*16;
+    el.style.width=w+'px';el.style.height=(w*24/34)+'px';
+    el.style.left=(Math.random()*100)+'%';
+    el.innerHTML='<rect x="1" y="1" width="32" height="22" rx="2.5" fill="#FBF1DC" stroke="#586B50" stroke-width="1.2"/>'+
+                 '<path d="M1 1 L17 13 L33 1" fill="none" stroke="#586B50" stroke-width="1.2" stroke-linejoin="round"/>';
+    rain.appendChild(el);
+    var H=sec.offsetHeight+80,dur=5+Math.random()*4;
+    function kill(){if(el.parentNode){el.remove();alive--;}}
+    gsap.timeline({onComplete:kill})
+      .fromTo(el,{y:-46,x:0,rotation:(Math.random()-.5)*50,opacity:0},
+                 {y:H,x:(Math.random()-.5)*70,rotation:(Math.random()-.5)*160,
+                  duration:dur,ease:'none'},0)
+      .fromTo(el,{opacity:0},{opacity:.8,duration:dur*.18,ease:'power1.out'},0)
+      .to(el,{opacity:0,duration:dur*.25,ease:'power1.in'},dur*.75);
+  }
+
+  /* Spawn por el ticker de GSAP (no setInterval): se pausa con la pestaña. */
+  function scheduleSpawn(){
+    spawnCall=gsap.delayedCall(.52,function(){
+      if(!raining)return;
+      makeEnvelope();
+      scheduleSpawn();
+    });
+  }
+  function startRain(){
+    for(var i=0;i<7;i++)gsap.delayedCall(i*.26,makeEnvelope);
+    scheduleSpawn();
+  }
+  function stopRain(){
+    raining=false;
+    if(spawnCall)spawnCall.kill();
+    gsap.to(rain,{opacity:0,duration:1.1,ease:'power2.out',
+      onComplete:function(){rain.innerHTML='';alive=0;}});
+  }
+
+  function land(){
+    if(landed)return;landed=true;
+    stopRain();
+    /* Un sobre se detiene: cae desde arriba y se asienta con rebote.
+       fromTo (no from) para que el sobre nunca quede en opacity:0 si el
+       trigger llega tarde. */
+    gsap.fromTo(btn,
+      {opacity:0,y:-150,rotation:-12,scale:.82},
+      {opacity:1,y:0,rotation:0,scale:1,duration:1.15,ease:'back.out(1.5)',
+       immediateRender:false,
+       onComplete:function(){
+         if(body)body.classList.add('landed');
+         if(hint)hint.classList.add('show');
+       }});
+  }
+
+  startRain();
+  /* 'center 55%' y no 'center center': el reveal desplaza 28px las secciones
+     aún no visibles y el umbral exacto queda fuera de alcance. */
+  ScrollTrigger.create({trigger:sec,start:'center 55%',once:true,onEnter:land,onEnterBack:land});
+  /* Red de seguridad: si el trigger no dispara (o GSAP se congela), el sobre
+     aparece igual — nunca se queda invisible. */
+  setTimeout(function(){
+    if(landed)return;
+    var r=sec.getBoundingClientRect();
+    if(r.top<window.innerHeight&&r.bottom>0)land();
+  },9000);
+  setTimeout(function(){
+    if(landed)return;
+    btn.style.opacity='1';
+    if(hint)hint.classList.add('show');
+  },16000);
+
+  function toggle(e){
+    if(e)e.preventDefault();
+    var open=btn.classList.toggle('open');
+    btn.setAttribute('aria-expanded',open?'true':'false');
+    if(open&&body)body.classList.remove('landed');
+    if(window.ScrollTrigger)ScrollTrigger.refresh();
+  }
+  btn.addEventListener('click',toggle);
+})();
 
 
 
@@ -3678,8 +4065,6 @@ function toast(msg) {
   const audio = document.getElementById('bgMusic');
   const btn   = document.getElementById('musicBtn');
   if(!audio || !btn) return;
-  const icoPlay  = document.getElementById('musicIcoPlay');
-  const icoPause = document.getElementById('musicIcoPause');
   let playing = false;
 
   function startMusic(){
@@ -3687,8 +4072,8 @@ function toast(msg) {
     audio.volume = 0.32;
     audio.play().then(()=>{
       playing = true;
-      icoPlay.style.display  = 'none';
-      icoPause.style.display = 'block';
+      btn.classList.add('on');
+      btn.setAttribute('aria-label','Pausar música');
     }).catch(()=>{});
   }
 
@@ -3701,8 +4086,8 @@ function toast(msg) {
     if(playing){
       audio.pause();
       playing = false;
-      icoPlay.style.display  = 'block';
-      icoPause.style.display = 'none';
+      btn.classList.remove('on');
+      btn.setAttribute('aria-label','Reproducir música');
     } else {
       startMusic();
     }
@@ -3713,15 +4098,11 @@ function toast(msg) {
 <!-- Música ambiental -->
 <audio id="bgMusic" src="https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/audio/xv-nathaly-aranzazu/cancion.mp3" loop preload="none"></audio>
 
-<!-- Botón flotante de música -->
-<button id="musicBtn" class="music-btn" aria-label="Música de fondo">
-  <svg id="musicIcoPlay" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path d="M9 18V5l12-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm12-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
-  <svg id="musicIcoPause" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="display:none">
-    <rect x="6" y="4" width="4" height="16" rx="1.5" fill="currentColor"/>
-    <rect x="14" y="4" width="4" height="16" rx="1.5" fill="currentColor"/>
-  </svg>
+<!-- Botón flotante de música · disco de vinilo -->
+<button id="musicBtn" class="music-btn" aria-label="Reproducir música">
+  <span class="vinyl" id="vinylDisc" aria-hidden="true">
+    <span class="vinyl-label"><span class="vinyl-hole"></span></span>
+  </span>
 </button>
 
 </body>
