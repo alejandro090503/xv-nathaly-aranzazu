@@ -578,7 +578,12 @@ body.envelope-locked{overflow:hidden;height:100vh}
   white-space:nowrap;
 }
 
-.h-amp-clip{overflow:hidden;line-height:1.18;margin:4px 0 6px;padding:0 6px}
+.h-amp-clip{
+  overflow:hidden;line-height:1.18;margin:4px 0 6px;padding:0 6px;
+  filter:drop-shadow(0 1px 1px rgba(88,107,80,.28))
+         drop-shadow(0 0 18px rgba(201,169,106,.5));
+  animation:hAmpShimmer 6s ease-in-out infinite;
+}
 .h-amp{
   font-family:'Great Vibes',cursive;
   font-size:62px;
@@ -593,13 +598,13 @@ body.envelope-locked{overflow:hidden;height:100vh}
   filter:drop-shadow(0 2px 8px rgba(255,247,232,.55))
          drop-shadow(0 0 18px rgba(217,196,154,.35));
   will-change:background-position;
-  animation:champFlow 9s ease-in-out infinite, hAmpShimmer 6s ease-in-out infinite;
+  animation:champFlow 9s ease-in-out infinite;
 }
 @keyframes hAmpShimmer{
-  0%,100%{filter:drop-shadow(0 1px 1px rgba(88,107,80,.30)) drop-shadow(0 0 16px rgba(201,169,106,.45))}
-  50%    {filter:drop-shadow(0 1px 2px rgba(88,107,80,.36)) drop-shadow(0 0 26px rgba(201,169,106,.65))}
+  0%,100%{filter:drop-shadow(0 1px 1px rgba(88,107,80,.28)) drop-shadow(0 0 16px rgba(201,169,106,.45))}
+  50%    {filter:drop-shadow(0 1px 2px rgba(88,107,80,.34)) drop-shadow(0 0 26px rgba(201,169,106,.65))}
 }
-@media(prefers-reduced-motion:reduce){.h-amp{animation:none}}
+@media(prefers-reduced-motion:reduce){.h-amp,.h-amp-clip{animation:none}}
 
 /* Líneas de viento laterales — delgadas */
 .h-name-wind-line{
@@ -1427,10 +1432,10 @@ body.envelope-locked{overflow:hidden;height:100vh}
 }
 
 /* ── GALERÍA · RUEDA 3D ───────────────────────────────── */
-#gallery{overflow-x:hidden}
+#gallery{overflow:hidden}
 .wheel-scene{
-  position:relative;width:100%;height:360px;margin:34px auto 0;
-  perspective:1200px;transform-style:preserve-3d;overflow:visible;
+  position:relative;width:100%;height:340px;margin:30px auto 0;
+  perspective:1000px;transform-style:preserve-3d;overflow:visible;
 }
 .wheel-ring{
   position:absolute;width:100%;height:100%;
@@ -1438,8 +1443,8 @@ body.envelope-locked{overflow:hidden;height:100vh}
 }
 .wheel-ring.dragging{cursor:grabbing}
 .wheel-card{
-  position:absolute;width:168px;height:236px;
-  left:50%;top:50%;margin-left:-84px;margin-top:-118px;
+  position:absolute;width:150px;height:210px;
+  left:50%;top:50%;margin-left:-75px;margin-top:-105px;
   border-radius:14px;overflow:hidden;
   border:2px solid rgba(201,169,106,.5);
   box-shadow:0 12px 34px rgba(42,51,37,.20);
@@ -1463,8 +1468,8 @@ body.envelope-locked{overflow:hidden;height:100vh}
 }
 .wheel-ph svg{width:36%;max-width:52px;opacity:.5}
 @media(max-width:360px){
-  .wheel-scene{height:320px}
-  .wheel-card{width:148px;height:208px;margin-left:-74px;margin-top:-104px}
+  .wheel-scene{height:310px}
+  .wheel-card{width:132px;height:186px;margin-left:-66px;margin-top:-93px}
 }
 
 
@@ -2946,7 +2951,7 @@ body{font-weight:400}
   <span class="lbl">Mi historia</span>
   <h2 class="ttl">Galería</h2>
   <div class="gline"></div>
-  <p class="gal-sub"><em>Momentos que atesoro — muy pronto aquí</em></p>
+  <p class="gal-sub"><em>Momentos que atesoro — las fotos llegan muy pronto</em></p>
 
   <div class="wheel-scene" id="wheelScene">
     <div class="wheel-ring" id="wheelRing">
@@ -2959,7 +2964,7 @@ body{font-weight:400}
     </div>
   </div>
 
-  <span class="drop-hint" id="dropHint">Arrastra para girar — las fotos de Nathaly llegan muy pronto</span>
+  <span class="drop-hint" id="dropHint">Arrastra para girar</span>
 
 </section>
 
@@ -4088,7 +4093,9 @@ function initGallery() {
   var radius = 210;
   function layout(){
     var w = scene.getBoundingClientRect().width || window.innerWidth;
-    radius = Math.max(150, Math.min(210, w * 0.52));
+    /* 0.40 del ancho: con radios mayores las tarjetas laterales se salen
+       de la pantalla en móviles estrechos. */
+    radius = Math.max(120, Math.min(175, w * 0.40));
     cards.forEach(function(card, i){
       card.style.transform = 'rotateY(' + (360 / n * i) + 'deg) translateZ(' + radius + 'px)';
     });
